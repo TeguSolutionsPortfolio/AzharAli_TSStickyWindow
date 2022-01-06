@@ -1,4 +1,7 @@
-﻿using System.Windows;
+﻿using System;
+using System.Runtime.CompilerServices;
+using System.Windows;
+using System.Windows.Input;
 
 namespace TSStickyWindow.UISample
 {
@@ -10,6 +13,32 @@ namespace TSStickyWindow.UISample
         public MainWindow()
         {
             InitializeComponent();
+
+            LocationChanged += OnLocationChanged;
+        }
+
+        private void OnLocationChanged(object? sender, EventArgs e)
+        {
+            PositionX.Content = Left.ToString("0.#");
+            PositionY.Content = Top.ToString("0.#");
+        }
+
+        private void Title_lbl_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            OnMouseLeftButtonDown(e);
+
+            var pos = e.GetPosition(this);
+            //PositionX.Content = Left.ToString("0.#");
+            //PositionY.Content = Top.ToString("0.#");
+
+            DragMove();
+        }
+        
+
+
+        private void BtnClose_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
         }
     }
 }

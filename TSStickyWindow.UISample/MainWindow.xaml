@@ -5,8 +5,55 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TSStickyWindow.UISample"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        x:Name="Main" Title="TS Sticky Window Sample" 
+        Height="270" Width="570" 
+        WindowStyle="None" 
+        Background="#222222" 
+        ResizeMode="NoResize">
+
+    <!--<WindowChrome.WindowChrome>
+        <WindowChrome CaptionHeight="26"/>
+    </WindowChrome.WindowChrome>-->
+
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Title -->
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="30"/>
+            </Grid.ColumnDefinitions>
+
+            <Label Grid.Row="0" Content="TS Sticky Window Sample"
+                   Background="#181818" Foreground="White" 
+                   HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
+                   MouseLeftButtonDown="Title_lbl_MouseLeftButtonDown"/>
+
+            <Button Background="#222222" Foreground="White" Grid.Column="1" Content="X" Click="BtnClose_Click"/>
+        </Grid>
+
+
+        <!-- Content -->
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+
+            <Label Name="PositionX" Grid.Row="0" Grid.Column="0" Foreground="White"/>
+            <Label Name="PositionY" Grid.Row="0" Grid.Column="1" Foreground="White"/>
+        </Grid>
+
 
     </Grid>
 </Window>
