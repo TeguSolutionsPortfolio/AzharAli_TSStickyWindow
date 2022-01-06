@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32014.148
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TSStickyWindow", "TSStickyWindow\TSStickyWindow.csproj", "{FEAE25C0-AED7-47E8-B19D-236933FD5ACA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TSStickyWindow.UISample", "TSStickyWindow.UISample\TSStickyWindow.UISample.csproj", "{0178B615-154E-45C0-8706-C4B1621AB5A3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FEAE25C0-AED7-47E8-B19D-236933FD5ACA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FEAE25C0-AED7-47E8-B19D-236933FD5ACA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FEAE25C0-AED7-47E8-B19D-236933FD5ACA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FEAE25C0-AED7-47E8-B19D-236933FD5ACA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0178B615-154E-45C0-8706-C4B1621AB5A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0178B615-154E-45C0-8706-C4B1621AB5A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0178B615-154E-45C0-8706-C4B1621AB5A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0178B615-154E-45C0-8706-C4B1621AB5A3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {462A2691-B993-4DD6-8470-B97E00C740B5}
+	EndGlobalSection
+EndGlobal
