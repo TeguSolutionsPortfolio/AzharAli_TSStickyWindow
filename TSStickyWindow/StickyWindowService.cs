@@ -58,48 +58,48 @@ namespace TSStickyWindow
                 if (target == source)
                     continue;
 
-                // Top edge
-                if (Math.Abs(target.Top - source.Bottom) < offset &&
-                    target.Left <= source.Right &&
-                    target.Right >= source.Left)
+                // Source Top Edge
+                else if (Math.Abs(target.Bottom - source.Top) < offset &&
+                         target.Left <= source.Right &&
+                         target.Right >= source.Left)
                 {
-                    if (source.CanStickWindow(target, StickPosition.Top) && target.CanStickWindow(source, StickPosition.Bottom))
+                    if (source.CanStickWindow(target, StickPosition.Bottom) && target.CanStickWindow(source, StickPosition.Top))
                     {
                         source.StickWindow(target, StickPosition.Top);
                         target.StickWindow(source, StickPosition.Bottom);
                     }
                 }
 
-                // Right edge
-                else if (Math.Abs(target.Right - source.Left) < offset && 
-                    target.Top <= source.Bottom && 
-                    target.Bottom >= source.Top)
+                // Source Right Edge
+                else if (Math.Abs(target.Left - source.Right) < offset &&
+                         target.Top <= source.Bottom &&
+                         target.Bottom >= source.Top)
                 {
-                    if (source.CanStickWindow(target, StickPosition.Right) && target.CanStickWindow(source, StickPosition.Left))
+                    if (source.CanStickWindow(target, StickPosition.Left) && target.CanStickWindow(source, StickPosition.Right))
                     {
                         source.StickWindow(target, StickPosition.Right);
                         target.StickWindow(source, StickPosition.Left);
                     }
                 }
 
-                // Bottom edge
-                else if (Math.Abs(target.Bottom - source.Top) < offset &&
+                // Source Bottom Edge
+                if (Math.Abs(target.Top - source.Bottom) < offset &&
                     target.Left <= source.Right &&
                     target.Right >= source.Left)
                 {
-                    if (source.CanStickWindow(target, StickPosition.Bottom) && target.CanStickWindow(source, StickPosition.Top))
+                    if (source.CanStickWindow(target, StickPosition.Top) && target.CanStickWindow(source, StickPosition.Bottom))
                     {
                         source.StickWindow(target, StickPosition.Bottom);
                         target.StickWindow(source, StickPosition.Top);
                     }
                 }
 
-                // Left edge
-                else if (Math.Abs(target.Left - source.Right) < offset &&
-                    target.Top <= source.Bottom &&
+                // Source Left Edge
+                else if (Math.Abs(target.Right - source.Left) < offset && 
+                    target.Top <= source.Bottom && 
                     target.Bottom >= source.Top)
                 {
-                    if (source.CanStickWindow(target, StickPosition.Left) && target.CanStickWindow(source, StickPosition.Right))
+                    if (source.CanStickWindow(target, StickPosition.Right) && target.CanStickWindow(source, StickPosition.Left))
                     {
                         source.StickWindow(target, StickPosition.Left);
                         target.StickWindow(source, StickPosition.Right);
@@ -154,7 +154,10 @@ namespace TSStickyWindow
         private Button btnUnstick;
 
         // Test Controls (removable in production)
-        private Border mainBorder;
+        private Border brdTop;
+        private Border brdRight;
+        private Border brdBottom;
+        private Border brdLeft;
 
         private Label lblTitle;
 
@@ -172,7 +175,10 @@ namespace TSStickyWindow
                 btnUnstick.Click += StartUnstickWindows;
 
                 // Test Controls (removable in production)
-                mainBorder = Window.FindName("MainBorder") as Border ?? new Border();
+                brdTop = Window.FindName("BrdTop") as Border ?? new Border();
+                brdRight = Window.FindName("BrdRight") as Border ?? new Border();
+                brdBottom = Window.FindName("BrdBottom") as Border ?? new Border();
+                brdLeft = Window.FindName("BrdLeft") as Border ?? new Border();
 
                 lblTitle = Window.FindName("LblTitle") as Label ?? new Label();
 
@@ -292,16 +298,30 @@ namespace TSStickyWindow
 
         private void HighlightStickState()
         {
-            if (StickTop is not null || StickRight is not null || StickBottom is not null || StickLeft is not null)
-            {
-                mainBorder.BorderBrush = new SolidColorBrush(Colors.Red);
-                btnUnstick.Visibility = Visibility.Visible;
-            }
+            if (StickTop is null)
+                brdTop.BorderBrush = new SolidColorBrush(Colors.DarkGray);
             else
-            {
-                mainBorder.BorderBrush = new SolidColorBrush(Colors.Lime);
+                brdTop.BorderBrush = new SolidColorBrush(Colors.Lime);
+
+            if (StickRight is null)
+                brdRight.BorderBrush = new SolidColorBrush(Colors.DarkGray);
+            else
+                brdRight.BorderBrush = new SolidColorBrush(Colors.Lime);
+
+            if (StickBottom is null)
+                brdBottom.BorderBrush = new SolidColorBrush(Colors.DarkGray);
+            else
+                brdBottom.BorderBrush = new SolidColorBrush(Colors.Lime);
+
+            if (StickLeft is null)
+                brdLeft.BorderBrush = new SolidColorBrush(Colors.DarkGray);
+            else
+                brdLeft.BorderBrush = new SolidColorBrush(Colors.Lime);
+
+            if (StickTop is not null || StickRight is not null || StickBottom is not null || StickLeft is not null)
+                btnUnstick.Visibility = Visibility.Visible;
+            else
                 btnUnstick.Visibility = Visibility.Collapsed;
-            }
         }
 
         private void StartUnstickWindows(object sender, RoutedEventArgs e)
