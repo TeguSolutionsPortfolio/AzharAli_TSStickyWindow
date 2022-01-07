@@ -136,22 +136,22 @@ namespace TSStickyWindow
         public StickyWindow(StickyWindowService windowService, Window window)
         {
             service = windowService;
-            this.window = window;
+            this.Window = window;
 
-            this.window.LocationChanged += WindowOnLocationChanged;
-            this.window.Closing += WindowOnClosing;
+            this.Window.LocationChanged += WindowOnLocationChanged;
+            this.Window.Closing += WindowOnClosing;
 
             SetWindowControls();
 
             Id = service.GetNextId();
             lblTitle!.Content = Id;
 
-            this.window.Show();
+            this.Window.Show();
         }
 
         #endregion
 
-        internal Window window { get; }
+        internal Window Window { get; }
 
         #region Window Controls
 
@@ -181,26 +181,26 @@ namespace TSStickyWindow
             try
             {
                 // Production controls
-                btnUnstick = window.FindName("BtnUnstick") as Button ?? new Button();
+                btnUnstick = Window.FindName("BtnUnstick") as Button ?? new Button();
                 btnUnstick.Click += StartUnstickWindows;
 
                 // Test Controls (removable in production)
-                brdTop = window.FindName("BrdTop") as Border ?? new Border();
-                brdRight = window.FindName("BrdRight") as Border ?? new Border();
-                brdBottom = window.FindName("BrdBottom") as Border ?? new Border();
-                brdLeft = window.FindName("BrdLeft") as Border ?? new Border();
+                brdTop = Window.FindName("BrdTop") as Border ?? new Border();
+                brdRight = Window.FindName("BrdRight") as Border ?? new Border();
+                brdBottom = Window.FindName("BrdBottom") as Border ?? new Border();
+                brdLeft = Window.FindName("BrdLeft") as Border ?? new Border();
 
-                lblTitle = window.FindName("LblTitle") as Label ?? new Label();
+                lblTitle = Window.FindName("LblTitle") as Label ?? new Label();
 
-                lblConnectionTopId = window.FindName("LblConnectionTopId") as Label ?? new Label();
-                lblConnectionRightId = window.FindName("LblConnectionRightId") as Label ?? new Label();
-                lblConnectionBottomId = window.FindName("LblConnectionBottomId") as Label ?? new Label();
-                lblConnectionLeftId = window.FindName("LblConnectionLeftId") as Label ?? new Label();
+                lblConnectionTopId = Window.FindName("LblConnectionTopId") as Label ?? new Label();
+                lblConnectionRightId = Window.FindName("LblConnectionRightId") as Label ?? new Label();
+                lblConnectionBottomId = Window.FindName("LblConnectionBottomId") as Label ?? new Label();
+                lblConnectionLeftId = Window.FindName("LblConnectionLeftId") as Label ?? new Label();
 
-                positionLeft = window.FindName("LblPositionLeft") as Label ?? new Label();
-                positionTop = window.FindName("LblPositionTop") as Label ?? new Label();
-                positionRight = window.FindName("LblPositionRight") as Label ?? new Label();
-                positionBottom = window.FindName("LblPositionBottom") as Label ?? new Label();
+                positionLeft = Window.FindName("LblPositionLeft") as Label ?? new Label();
+                positionTop = Window.FindName("LblPositionTop") as Label ?? new Label();
+                positionRight = Window.FindName("LblPositionRight") as Label ?? new Label();
+                positionBottom = Window.FindName("LblPositionBottom") as Label ?? new Label();
 
                 // Custom event handlers
                 lblTitle.PreviewMouseLeftButtonDown += LblTitleMouseLeftButtonDown;
@@ -221,7 +221,7 @@ namespace TSStickyWindow
                 return;
 
             //Window.OnMouseLeftButtonDown(e);
-            window.DragMove();
+            Window.DragMove();
         }
 
         private void WindowOnLocationChanged(object? sender, EventArgs e)
@@ -250,10 +250,10 @@ namespace TSStickyWindow
 
         #region Window Position
 
-        public double Left => window.Left;
-        public double Right => window.Left + window.Width;
-        public double Top => window.Top;
-        public double Bottom => window.Top + window.Height;
+        public double Left => Window.Left;
+        public double Right => Window.Left + Window.Width;
+        public double Top => Window.Top;
+        public double Bottom => Window.Top + Window.Height;
 
         #endregion
 
@@ -305,18 +305,29 @@ namespace TSStickyWindow
 
                 if (arrange)
                 {
-                    WinAPI.MouseLeftUp(window);
+                    WinAPI.MouseLeftUp(Window);
+                    await Task.Delay(100);
 
-                    await Task.Delay(50);
-
-                    window.Left = targetWindow.Left;
-                    window.Top = targetWindow.Bottom;
-                    window.Width = targetWindow.window.Width;
+                    Window.Left = targetWindow.Left;
+                    Window.Top = targetWindow.Bottom;
+                    Window.Width = targetWindow.Window.Width;
                 }
             }
 
             else if (position == StickPosition.Right)
+            {
                 StickRight = targetWindow;
+
+                if (arrange)
+                {
+                    WinAPI.MouseLeftUp(Window);
+                    await Task.Delay(100);
+
+                    Window.Left = targetWindow.Left - Window.Width;
+                    Window.Top = targetWindow.Top;
+                    Window.Height = targetWindow.Window.Height;
+                }
+            }
 
             else if (position == StickPosition.Bottom)
             {
@@ -324,14 +335,29 @@ namespace TSStickyWindow
 
                 if (arrange)
                 {
-                    window.Left = targetWindow.Left;
-                    window.Top = targetWindow.Top + targetWindow.window.Height;
-                    window.Width = targetWindow.window.Width;
+                    WinAPI.MouseLeftUp(Window);
+                    await Task.Delay(100);
+
+                    Window.Left = targetWindow.Left;
+                    Window.Top = targetWindow.Top - Window.Height;
+                    Window.Width = targetWindow.Window.Width;
                 }
             }
 
             else if (position == StickPosition.Left)
+            {
                 StickLeft = targetWindow;
+
+                if (arrange)
+                {
+                    WinAPI.MouseLeftUp(Window);
+                    await Task.Delay(100);
+
+                    Window.Left = targetWindow.Left + targetWindow.Window.Width;
+                    Window.Top = targetWindow.Top;
+                    Window.Height = targetWindow.Window.Height;
+                }
+            }
 
             HighlightStickState();
         }
