@@ -34,6 +34,18 @@ namespace TSStickyWindow
 
         #endregion
 
+        #region Id Service
+
+        private int biggestGivenId;
+
+        internal string GetNextId()
+        {
+            biggestGivenId ++;
+            return biggestGivenId.ToString();
+        }
+
+        #endregion
+
         public void AddNewWindow(Window window)
         {
             windows.Add(new StickyWindow(this, window));
@@ -113,6 +125,8 @@ namespace TSStickyWindow
     {
         private readonly StickyWindowService service;
 
+        private string id { get; set; }
+
         #region Constructor
 
         public StickyWindow(StickyWindowService windowService, Window window)
@@ -123,6 +137,9 @@ namespace TSStickyWindow
             Window.LocationChanged += WindowOnLocationChanged;
 
             SetWindowControls();
+
+            id = service.GetNextId();
+            lblTitle!.Content = id;
 
             Window.Show();
         }
@@ -138,6 +155,9 @@ namespace TSStickyWindow
 
         // Test Controls (removable in production)
         private Border mainBorder;
+
+        private Label lblTitle;
+
         private Label positionLeft;
         private Label positionTop;
         private Label positionRight;
@@ -153,6 +173,9 @@ namespace TSStickyWindow
 
                 // Test Controls (removable in production)
                 mainBorder = Window.FindName("MainBorder") as Border ?? new Border();
+
+                lblTitle = Window.FindName("LblTitle") as Label ?? new Label();
+
                 positionLeft = Window.FindName("LblPositionLeft") as Label ?? new Label();
                 positionTop = Window.FindName("LblPositionTop") as Label ?? new Label();
                 positionRight = Window.FindName("LblPositionRight") as Label ?? new Label();
@@ -197,10 +220,6 @@ namespace TSStickyWindow
         #endregion
 
         #region Sticked Windows Management
-
-        //internal List<(StickyWindow window, StickPosition position)> StickedWindows { get; }
-        //internal List<KeyValuePair<StickyWindow, StickPosition>> StickedWindows { get; }
-        //internal Dictionary<StickPosition, StickyWindow?> StickedWindows { get; }
 
         internal StickyWindow? StickTop { get; set; }
         internal StickyWindow? StickRight { get; set; }

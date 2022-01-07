@@ -31,10 +31,10 @@
                     <ColumnDefinition Width="30"/>
                 </Grid.ColumnDefinitions>
 
-                <Label Grid.Row="0" Content="TS Sticky Window Sample"
-                   Background="#181818" Foreground="White" 
-                   HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
-                   MouseLeftButtonDown="Title_lbl_MouseLeftButtonDown"/>
+                <Label Name="LblTitle" Grid.Row="0" Content=""
+                       Background="#181818" Foreground="White" 
+                       HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
+                       MouseLeftButtonDown="Title_lbl_MouseLeftButtonDown"/>
 
                 <Button Name="BtnUnstick" Background="#222222" Foreground="White" Grid.Column="1" Content="U" Visibility="Collapsed"/>
                 <Button Background="#222222" Foreground="White" Grid.Column="2" Content="X" Click="BtnClose_Click"/>
