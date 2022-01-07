@@ -161,6 +161,11 @@ namespace TSStickyWindow
 
         private Label lblTitle;
 
+        private Label lblConnectionTopId;
+        private Label lblConnectionRightId;
+        private Label lblConnectionBottomId;
+        private Label lblConnectionLeftId;
+
         private Label positionLeft;
         private Label positionTop;
         private Label positionRight;
@@ -181,6 +186,11 @@ namespace TSStickyWindow
                 brdLeft = Window.FindName("BrdLeft") as Border ?? new Border();
 
                 lblTitle = Window.FindName("LblTitle") as Label ?? new Label();
+
+                lblConnectionTopId = Window.FindName("LblConnectionTopId") as Label ?? new Label();
+                lblConnectionRightId = Window.FindName("LblConnectionRightId") as Label ?? new Label();
+                lblConnectionBottomId = Window.FindName("LblConnectionBottomId") as Label ?? new Label();
+                lblConnectionLeftId = Window.FindName("LblConnectionLeftId") as Label ?? new Label();
 
                 positionLeft = Window.FindName("LblPositionLeft") as Label ?? new Label();
                 positionTop = Window.FindName("LblPositionTop") as Label ?? new Label();

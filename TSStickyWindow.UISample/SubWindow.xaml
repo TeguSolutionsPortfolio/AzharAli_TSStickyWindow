@@ -49,25 +49,34 @@
                                 <RowDefinition Height="1*"/>
                                 <RowDefinition Height="1*"/>
                                 <RowDefinition Height="1*"/>
+                                <RowDefinition Height="1*"/>
+                                <RowDefinition Height="1*"/>
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="1*"/>
-                                <ColumnDefinition Width="1*"/>
-                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="50"/>
+                                <ColumnDefinition Width="50"/>
                                 <ColumnDefinition Width="1*"/>
                             </Grid.ColumnDefinitions>
 
-                            <Label Grid.Row="0" Grid.Column="1" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" Foreground="White" Content="Left:"/>
-                            <Label Name="LblPositionLeft" Grid.Row="0" Grid.Column="2" VerticalContentAlignment="Center" Foreground="White"/>
+                            <!-- Position Indicators -->
+                            <Label Grid.Row="1" Grid.Column="1" Padding="0" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Foreground="White" Content="Left:"/>
+                            <Label Name="LblPositionLeft" Grid.Row="1" Grid.Column="2" Padding="0" VerticalContentAlignment="Center" Foreground="White"/>
 
-                            <Label Grid.Row="1" Grid.Column="1" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" Foreground="White" Content="Top:"/>
-                            <Label Name="LblPositionTop" Grid.Row="1" Grid.Column="2" VerticalContentAlignment="Center" Foreground="White"/>
+                            <Label Grid.Row="2" Grid.Column="1" Padding="0" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Foreground="White" Content="Top:"/>
+                            <Label Name="LblPositionTop" Grid.Row="2" Grid.Column="2" Padding="0" VerticalContentAlignment="Center" Foreground="White"/>
 
-                            <Label Grid.Row="2" Grid.Column="1" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" Foreground="White" Content="Right:"/>
-                            <Label Name="LblPositionRight" Grid.Row="2" Grid.Column="2" VerticalContentAlignment="Center" Foreground="White"/>
+                            <Label Grid.Row="3" Grid.Column="1" Padding="0" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Foreground="White" Content="Right:"/>
+                            <Label Name="LblPositionRight" Grid.Row="3" Grid.Column="2" Padding="0" VerticalContentAlignment="Center" Foreground="White"/>
 
-                            <Label Grid.Row="3" Grid.Column="1" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" Foreground="White" Content="Bottom:"/>
-                            <Label Name="LblPositionBottom" Grid.Row="3" Grid.Column="2" VerticalContentAlignment="Center" Foreground="White"/>
+                            <Label Grid.Row="4" Grid.Column="1" Padding="0" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Foreground="White" Content="Bottom:"/>
+                            <Label Name="LblPositionBottom" Grid.Row="4" Grid.Column="2" Padding="0" VerticalContentAlignment="Center" Foreground="White"/>
+
+                            <!-- Edge Sticked Window Ids -->
+                            <Label Name="LblConnectionTopId" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Padding="0" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Foreground="Orange"/>
+                            <Label Name="LblConnectionRightId" Grid.Row="2" Grid.Column="3" Padding="0" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Foreground="Orange"/>
+                            <Label Name="LblConnectionBottomId" Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2" Padding="0" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Foreground="Orange"/>
+                            <Label Name="LblConnectionLeftId" Grid.Row="2" Grid.Column="0" Padding="0" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Foreground="Orange"/>
                         </Grid>
                     </Grid>
 
