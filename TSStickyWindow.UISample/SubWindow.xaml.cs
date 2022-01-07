@@ -15,8 +15,8 @@ namespace TSStickyWindow.UISample
 
         private void Title_lbl_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            OnMouseLeftButtonDown(e);
-            DragMove();
+            //OnMouseLeftButtonDown(e);
+            //DragMove();
         }
 
         private void BtnClose_Click(object sender, RoutedEventArgs e)
