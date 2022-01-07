@@ -7,69 +7,72 @@
         mc:Ignorable="d"
         x:Name="Main" 
         Title="TS Sticky Window Sample" 
-        Height="270" Width="570" 
+        Height="270" Width="370" 
         WindowStyle="None" 
-        ResizeMode="NoResize"
-        Background="#222222" 
-        BorderBrush="Lime"
-        BorderThickness="1">
+        ResizeMode="CanResize"
+        Background="#222222" >
 
-    <!--<WindowChrome.WindowChrome>
-        <WindowChrome CaptionHeight="26"/>
-    </WindowChrome.WindowChrome>-->
+    <WindowChrome.WindowChrome>
+        <WindowChrome CaptionHeight="1"/>
+    </WindowChrome.WindowChrome>
 
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="30"/>
-            <RowDefinition Height="1*"/>
-        </Grid.RowDefinitions>
+    <Border Name="MainBorder" BorderThickness="2" BorderBrush="Lime">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="1*"/>
+            </Grid.RowDefinitions>
 
-        <!-- Title -->
-        <Grid Grid.Row="0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1*"/>
-                <ColumnDefinition Width="30"/>
-            </Grid.ColumnDefinitions>
+            <!-- Title -->
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="30"/>
+                    <ColumnDefinition Width="30"/>
+                </Grid.ColumnDefinitions>
 
-            <Label Grid.Row="0" Content="TS Sticky Window Sample"
+                <Label Grid.Row="0" Content="TS Sticky Window Sample"
                    Background="#181818" Foreground="White" 
                    HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
                    MouseLeftButtonDown="Title_lbl_MouseLeftButtonDown"/>
 
-            <Button Background="#222222" Foreground="White" Grid.Column="1" Content="X" Click="BtnClose_Click"/>
+                <Button Name="BtnUnstick" Background="#222222" Foreground="White" Grid.Column="1" Content="U" Visibility="Collapsed"/>
+                <Button Background="#222222" Foreground="White" Grid.Column="2" Content="X" Click="BtnClose_Click"/>
+            </Grid>
+
+
+            <!-- Content -->
+            <Grid Grid.Row="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="1*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+
+                <Label Grid.Row="0" Grid.Column="1" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" Foreground="White" Content="Left:"/>
+                <Label Name="LblPositionLeft" Grid.Row="0" Grid.Column="2" VerticalContentAlignment="Center" Foreground="White"/>
+
+                <Label Grid.Row="1" Grid.Column="1" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" Foreground="White" Content="Top:"/>
+                <Label Name="LblPositionTop" Grid.Row="1" Grid.Column="2" VerticalContentAlignment="Center" Foreground="White"/>
+
+                <Label Grid.Row="2" Grid.Column="1" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" Foreground="White" Content="Right:"/>
+                <Label Name="LblPositionRight" Grid.Row="2" Grid.Column="2" VerticalContentAlignment="Center" Foreground="White"/>
+
+                <Label Grid.Row="3" Grid.Column="1" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" Foreground="White" Content="Bottom:"/>
+                <Label Name="LblPositionBottom" Grid.Row="3" Grid.Column="2" VerticalContentAlignment="Center" Foreground="White"/>
+
+                <Button Grid.Row="5" Grid.Column="1" Content="Open New" Click="Btn_NewWindow_Click"/>
+            </Grid>
         </Grid>
+    </Border>
 
-
-        <!-- Content -->
-        <Grid Grid.Row="1">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="1*"/>
-                <RowDefinition Height="1*"/>
-                <RowDefinition Height="1*"/>
-                <RowDefinition Height="1*"/>
-                <RowDefinition Height="1*"/>
-                <RowDefinition Height="1*"/>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1*"/>
-                <ColumnDefinition Width="1*"/>
-                <ColumnDefinition Width="1*"/>
-                <ColumnDefinition Width="1*"/>
-            </Grid.ColumnDefinitions>
-
-            <Label Grid.Row="0" Grid.Column="1" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" Foreground="White" Content="Left:"/>
-            <Label Name="LblPositionLeft" Grid.Row="0" Grid.Column="2" VerticalContentAlignment="Center" Foreground="White"/>
-
-            <Label Grid.Row="1" Grid.Column="1" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" Foreground="White" Content="Top:"/>
-            <Label Name="LblPositionTop" Grid.Row="1" Grid.Column="2" VerticalContentAlignment="Center" Foreground="White"/>
-
-            <Label Grid.Row="2" Grid.Column="1" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" Foreground="White" Content="Right:"/>
-            <Label Name="LblPositionRight" Grid.Row="2" Grid.Column="2" VerticalContentAlignment="Center" Foreground="White"/>
-
-            <Label Grid.Row="3" Grid.Column="1" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" Foreground="White" Content="Bottom:"/>
-            <Label Name="LblPositionBottom" Grid.Row="3" Grid.Column="2" VerticalContentAlignment="Center" Foreground="White"/>
-
-            <Button Grid.Row="5" Grid.Column="1" Content="Open New" Click="Btn_NewWindow_Click"/>
-        </Grid>
-    </Grid>
 </Window>
