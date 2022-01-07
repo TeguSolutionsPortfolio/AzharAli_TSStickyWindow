@@ -123,6 +123,11 @@ namespace TSStickyWindow
                 target.UnstickWindow(source);
             }
         }
+
+        internal void RemoveWindow(StickyWindow window)
+        {
+            windows.Remove(window);
+        }
     }
 
     public class StickyWindow
@@ -244,6 +249,7 @@ namespace TSStickyWindow
         private void WindowOnClosing(object sender, CancelEventArgs e)
         {
             service.TryUnstickWithOtherWindows(this);
+            service.RemoveWindow(this);
         }
 
         #endregion
