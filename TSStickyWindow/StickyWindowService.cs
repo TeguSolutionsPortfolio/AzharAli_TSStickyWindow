@@ -63,7 +63,7 @@ namespace TSStickyWindow
                          target.Left <= source.Right &&
                          target.Right >= source.Left)
                 {
-                    if (source.CanStickWindow(target, StickPosition.Bottom) && target.CanStickWindow(source, StickPosition.Top))
+                    if (source.CanStickWindow(target, StickPosition.Top) && target.CanStickWindow(source, StickPosition.Bottom))
                     {
                         source.StickWindow(target, StickPosition.Top);
                         target.StickWindow(source, StickPosition.Bottom);
@@ -75,7 +75,7 @@ namespace TSStickyWindow
                          target.Top <= source.Bottom &&
                          target.Bottom >= source.Top)
                 {
-                    if (source.CanStickWindow(target, StickPosition.Left) && target.CanStickWindow(source, StickPosition.Right))
+                    if (source.CanStickWindow(target, StickPosition.Right) && target.CanStickWindow(source, StickPosition.Left))
                     {
                         source.StickWindow(target, StickPosition.Right);
                         target.StickWindow(source, StickPosition.Left);
@@ -87,7 +87,7 @@ namespace TSStickyWindow
                     target.Left <= source.Right &&
                     target.Right >= source.Left)
                 {
-                    if (source.CanStickWindow(target, StickPosition.Top) && target.CanStickWindow(source, StickPosition.Bottom))
+                    if (source.CanStickWindow(target, StickPosition.Bottom) && target.CanStickWindow(source, StickPosition.Top))
                     {
                         source.StickWindow(target, StickPosition.Bottom);
                         target.StickWindow(source, StickPosition.Top);
@@ -99,7 +99,7 @@ namespace TSStickyWindow
                     target.Top <= source.Bottom && 
                     target.Bottom >= source.Top)
                 {
-                    if (source.CanStickWindow(target, StickPosition.Right) && target.CanStickWindow(source, StickPosition.Left))
+                    if (source.CanStickWindow(target, StickPosition.Left) && target.CanStickWindow(source, StickPosition.Right))
                     {
                         source.StickWindow(target, StickPosition.Left);
                         target.StickWindow(source, StickPosition.Right);
