@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
@@ -135,6 +136,7 @@ namespace TSStickyWindow
             Window = window;
 
             Window.LocationChanged += WindowOnLocationChanged;
+            Window.Closing += WindowOnClosing;
 
             SetWindowControls();
 
@@ -143,6 +145,8 @@ namespace TSStickyWindow
 
             Window.Show();
         }
+
+
 
         #endregion
 
@@ -224,6 +228,11 @@ namespace TSStickyWindow
             service.TryStickWithOtherWindows(this);
         }
 
+        private void WindowOnClosing(object sender, CancelEventArgs e)
+        {
+            service.TryUnstickWithOtherWindows(this);
+        }
+
         #endregion
 
         #region Window Position
@@ -278,13 +287,25 @@ namespace TSStickyWindow
         internal void StickWindow(StickyWindow targetWindow, StickPosition position)
         {
             if (position == StickPosition.Top)
+            {
                 StickTop = targetWindow;
+
+                Window.Left = targetWindow.Left;
+                Window.Top = targetWindow.Bottom;
+                Window.Width = targetWindow.Window.Width;
+            }
 
             else if (position == StickPosition.Right)
                 StickRight = targetWindow;
 
             else if (position == StickPosition.Bottom)
+            {
                 StickBottom = targetWindow;
+
+                Window.Left = targetWindow.Left;
+                Window.Top = targetWindow.Top + targetWindow.Window.Height;
+                Window.Width = targetWindow.Window.Width;
+            }
 
             else if (position == StickPosition.Left)
                 StickLeft = targetWindow;
