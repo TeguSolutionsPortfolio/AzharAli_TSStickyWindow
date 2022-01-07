@@ -46,43 +46,52 @@ namespace TSStickyWindow
                 if (target == source)
                     continue;
 
-                if (source.StickedWindows.Contains(target))
-                    continue;
-
-                // Right edge
-                if (Math.Abs(target.Right - source.Left) < offset && 
-                    target.Top <= source.Bottom && 
-                    target.Bottom >= source.Top)
-                {
-                    source.StickWindow(target);
-                    target.StickWindow(source);
-                }
-
-                // Bottom edge
-                if (Math.Abs(target.Bottom - source.Top) < offset &&
-                    target.Left <= source.Right &&
-                    target.Right >= source.Left)
-                {
-                    source.StickWindow(target);
-                    target.StickWindow(source);
-                }
-
-                // Left edge
-                if (Math.Abs(target.Left - source.Right) < offset &&
-                    target.Top <= source.Bottom &&
-                    target.Bottom >= source.Top)
-                {
-                    source.StickWindow(target);
-                    target.StickWindow(source);
-                }
-
                 // Top edge
                 if (Math.Abs(target.Top - source.Bottom) < offset &&
                     target.Left <= source.Right &&
                     target.Right >= source.Left)
                 {
-                    source.StickWindow(target);
-                    target.StickWindow(source);
+                    if (source.CanStickWindow(target, StickPosition.Top) && target.CanStickWindow(source, StickPosition.Bottom))
+                    {
+                        source.StickWindow(target, StickPosition.Top);
+                        target.StickWindow(source, StickPosition.Bottom);
+                    }
+                }
+
+                // Right edge
+                else if (Math.Abs(target.Right - source.Left) < offset && 
+                    target.Top <= source.Bottom && 
+                    target.Bottom >= source.Top)
+                {
+                    if (source.CanStickWindow(target, StickPosition.Right) && target.CanStickWindow(source, StickPosition.Left))
+                    {
+                        source.StickWindow(target, StickPosition.Right);
+                        target.StickWindow(source, StickPosition.Left);
+                    }
+                }
+
+                // Bottom edge
+                else if (Math.Abs(target.Bottom - source.Top) < offset &&
+                    target.Left <= source.Right &&
+                    target.Right >= source.Left)
+                {
+                    if (source.CanStickWindow(target, StickPosition.Bottom) && target.CanStickWindow(source, StickPosition.Top))
+                    {
+                        source.StickWindow(target, StickPosition.Bottom);
+                        target.StickWindow(source, StickPosition.Top);
+                    }
+                }
+
+                // Left edge
+                else if (Math.Abs(target.Left - source.Right) < offset &&
+                    target.Top <= source.Bottom &&
+                    target.Bottom >= source.Top)
+                {
+                    if (source.CanStickWindow(target, StickPosition.Left) && target.CanStickWindow(source, StickPosition.Right))
+                    {
+                        source.StickWindow(target, StickPosition.Left);
+                        target.StickWindow(source, StickPosition.Right);
+                    }
                 }
             }
         }
@@ -94,11 +103,8 @@ namespace TSStickyWindow
                 if (target == source)
                     continue;
 
-                if (source.StickedWindows.Contains(target))
-                {
-                    source.UnstickWindow(target);
-                    target.UnstickWindow(source);
-                }
+                source.UnstickWindow(target);
+                target.UnstickWindow(source);
             }
         }
     }
@@ -113,7 +119,6 @@ namespace TSStickyWindow
         {
             service = windowService;
             Window = window;
-            StickedWindows = new List<StickyWindow>();
 
             Window.LocationChanged += WindowOnLocationChanged;
 
@@ -193,25 +198,82 @@ namespace TSStickyWindow
 
         #region Sticked Windows Management
 
-        internal List<StickyWindow> StickedWindows { get; }
+        //internal List<(StickyWindow window, StickPosition position)> StickedWindows { get; }
+        //internal List<KeyValuePair<StickyWindow, StickPosition>> StickedWindows { get; }
+        //internal Dictionary<StickPosition, StickyWindow?> StickedWindows { get; }
 
-        internal void StickWindow(StickyWindow window)
+        internal StickyWindow? StickTop { get; set; }
+        internal StickyWindow? StickRight { get; set; }
+        internal StickyWindow? StickBottom { get; set; }
+        internal StickyWindow? StickLeft { get; set; }
+
+        internal bool CanStickWindow(StickyWindow window, StickPosition position)
         {
-            if (!StickedWindows.Contains(window))
-                StickedWindows.Add(window);
+            if (StickTop == window || StickRight == window || StickBottom == window || StickLeft == window)
+                return false;
+
+
+            if (position == StickPosition.Top)
+            {
+                if (StickTop is not null)
+                    return false;
+            }
+
+            if (position == StickPosition.Right)
+            {
+                if (StickRight is not null)
+                    return false;
+            }
+
+            if (position == StickPosition.Bottom)
+            {
+                if (StickBottom is not null)
+                    return false;
+            }
+
+            if (position == StickPosition.Left)
+            {
+                if (StickLeft is not null)
+                    return false;
+            }
+
+            return true;
+        }
+        // !! Use after the CanStickWindow validation !!
+        internal void StickWindow(StickyWindow window, StickPosition position)
+        {
+            if (position == StickPosition.Top)
+                StickTop = window;
+
+            else if (position == StickPosition.Right)
+                StickRight = window;
+
+            else if (position == StickPosition.Bottom)
+                StickBottom = window;
+
+            else if (position == StickPosition.Left)
+                StickLeft = window;
 
             HighlightStickState();
         }
 
         internal void UnstickWindow(StickyWindow window)
         {
-            StickedWindows.Remove(window);
+            if (StickTop == window)
+                StickTop = null;
+            else if (StickRight == window)
+                StickRight = null;
+            else if (StickBottom == window)
+                StickBottom = null;
+            else if (StickLeft == window)
+                StickLeft = null;
+
             HighlightStickState();
         }
 
         private void HighlightStickState()
         {
-            if (StickedWindows.Count > 0)
+            if (StickTop is not null || StickRight is not null || StickBottom is not null || StickLeft is not null)
             {
                 mainBorder.BorderBrush = new SolidColorBrush(Colors.Red);
                 btnUnstick.Visibility = Visibility.Visible;
@@ -229,5 +291,13 @@ namespace TSStickyWindow
         }
 
         #endregion
+    }
+
+    public enum StickPosition
+    {
+        Top = 0,
+        Right = 1,
+        Bottom = 2,
+        Left = 3
     }
 }
