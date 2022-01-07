@@ -49,10 +49,37 @@ namespace TSStickyWindow
                 if (source.StickedWindows.Contains(target))
                     continue;
 
-                // Right edge connection
+                // Right edge
                 if (Math.Abs(target.Right - source.Left) < offset && 
                     target.Top <= source.Bottom && 
                     target.Bottom >= source.Top)
+                {
+                    source.StickWindow(target);
+                    target.StickWindow(source);
+                }
+
+                // Bottom edge
+                if (Math.Abs(target.Bottom - source.Top) < offset &&
+                    target.Left <= source.Right &&
+                    target.Right >= source.Left)
+                {
+                    source.StickWindow(target);
+                    target.StickWindow(source);
+                }
+
+                // Left edge
+                if (Math.Abs(target.Left - source.Right) < offset &&
+                    target.Top <= source.Bottom &&
+                    target.Bottom >= source.Top)
+                {
+                    source.StickWindow(target);
+                    target.StickWindow(source);
+                }
+
+                // Top edge
+                if (Math.Abs(target.Top - source.Bottom) < offset &&
+                    target.Left <= source.Right &&
+                    target.Right >= source.Left)
                 {
                     source.StickWindow(target);
                     target.StickWindow(source);
