@@ -125,7 +125,7 @@ namespace TSStickyWindow
     {
         private readonly StickyWindowService service;
 
-        private string id { get; set; }
+        internal string Id { get; set; }
 
         #region Constructor
 
@@ -138,8 +138,8 @@ namespace TSStickyWindow
 
             SetWindowControls();
 
-            id = service.GetNextId();
-            lblTitle!.Content = id;
+            Id = service.GetNextId();
+            lblTitle!.Content = Id;
 
             Window.Show();
         }
@@ -275,32 +275,32 @@ namespace TSStickyWindow
             return true;
         }
         // !! Use after the CanStickWindow validation !!
-        internal void StickWindow(StickyWindow window, StickPosition position)
+        internal void StickWindow(StickyWindow targetWindow, StickPosition position)
         {
             if (position == StickPosition.Top)
-                StickTop = window;
+                StickTop = targetWindow;
 
             else if (position == StickPosition.Right)
-                StickRight = window;
+                StickRight = targetWindow;
 
             else if (position == StickPosition.Bottom)
-                StickBottom = window;
+                StickBottom = targetWindow;
 
             else if (position == StickPosition.Left)
-                StickLeft = window;
+                StickLeft = targetWindow;
 
             HighlightStickState();
         }
 
-        internal void UnstickWindow(StickyWindow window)
+        internal void UnstickWindow(StickyWindow targetWindow)
         {
-            if (StickTop == window)
+            if (StickTop == targetWindow)
                 StickTop = null;
-            else if (StickRight == window)
+            else if (StickRight == targetWindow)
                 StickRight = null;
-            else if (StickBottom == window)
+            else if (StickBottom == targetWindow)
                 StickBottom = null;
-            else if (StickLeft == window)
+            else if (StickLeft == targetWindow)
                 StickLeft = null;
 
             HighlightStickState();
@@ -309,24 +309,48 @@ namespace TSStickyWindow
         private void HighlightStickState()
         {
             if (StickTop is null)
+            {
                 brdTop.BorderBrush = new SolidColorBrush(Colors.DarkGray);
+                lblConnectionTopId.Content = "";
+            }
             else
+            {
                 brdTop.BorderBrush = new SolidColorBrush(Colors.Lime);
+                lblConnectionTopId.Content = StickTop.Id;
+            }
 
             if (StickRight is null)
+            {
                 brdRight.BorderBrush = new SolidColorBrush(Colors.DarkGray);
+                lblConnectionRightId.Content = "";
+            }
             else
+            {
                 brdRight.BorderBrush = new SolidColorBrush(Colors.Lime);
+                lblConnectionRightId.Content = StickRight.Id;
+            }
 
             if (StickBottom is null)
+            {
                 brdBottom.BorderBrush = new SolidColorBrush(Colors.DarkGray);
+                lblConnectionBottomId.Content = "";
+            }
             else
+            {
                 brdBottom.BorderBrush = new SolidColorBrush(Colors.Lime);
+                lblConnectionBottomId.Content = StickBottom.Id;
+            }
 
             if (StickLeft is null)
+            {
                 brdLeft.BorderBrush = new SolidColorBrush(Colors.DarkGray);
+                lblConnectionLeftId.Content = "";
+            }
             else
+            {
                 brdLeft.BorderBrush = new SolidColorBrush(Colors.Lime);
+                lblConnectionLeftId.Content = StickLeft.Id;
+            }
 
             if (StickTop is not null || StickRight is not null || StickBottom is not null || StickLeft is not null)
                 btnUnstick.Visibility = Visibility.Visible;
