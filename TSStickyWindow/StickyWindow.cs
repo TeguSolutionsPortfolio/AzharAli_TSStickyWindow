@@ -34,8 +34,6 @@ namespace TSStickyWindow
             Window.Show();
         }
 
-
-
         #endregion
 
         internal Window Window { get; }
@@ -103,7 +101,6 @@ namespace TSStickyWindow
         #region Window Events
 
         private bool isSticking;
-        //private bool isActiveWindow;
 
         private void LblTitleMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
@@ -112,11 +109,8 @@ namespace TSStickyWindow
 
             SetLastWindowPosition();
 
-            //isActiveWindow = true;
             //Window.OnMouseLeftButtonDown(e);
             Window.DragMove();
-
-            //isActiveWindow = false;
 
             isSticking = true;
             service.TryStickWithOtherWindows(this);
@@ -137,7 +131,7 @@ namespace TSStickyWindow
                 Debug.WriteLine(exception);
             }
 
-            if (!isSticking && /*isActiveWindow*/ Window.IsActive)
+            if (!isSticking && Window.IsActive)
             {
 
                 var deltaX = Window.Left - lastLeft;
@@ -246,7 +240,7 @@ namespace TSStickyWindow
                 {
                     Window.Left = targetWindow.Left;
                     Window.Top = targetWindow.Bottom;
-                    Window.Width = targetWindow.Window.Width;
+                    //Window.Width = targetWindow.Window.Width;
                 }
             }
 
@@ -258,7 +252,7 @@ namespace TSStickyWindow
                 {
                     Window.Left = targetWindow.Left - Window.Width;
                     Window.Top = targetWindow.Top;
-                    Window.Height = targetWindow.Window.Height;
+                    //Window.Height = targetWindow.Window.Height;
                 }
             }
 
@@ -270,7 +264,7 @@ namespace TSStickyWindow
                 {
                     Window.Left = targetWindow.Left;
                     Window.Top = targetWindow.Top - Window.Height;
-                    Window.Width = targetWindow.Window.Width;
+                    //Window.Width = targetWindow.Window.Width;
                 }
             }
 
@@ -282,7 +276,7 @@ namespace TSStickyWindow
                 {
                     Window.Left = targetWindow.Left + targetWindow.Window.Width;
                     Window.Top = targetWindow.Top;
-                    Window.Height = targetWindow.Window.Height;
+                    //Window.Height = targetWindow.Window.Height;
                 }
             }
 
