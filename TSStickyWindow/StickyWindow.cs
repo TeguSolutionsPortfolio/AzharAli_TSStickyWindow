@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows;
@@ -334,6 +335,23 @@ namespace TSStickyWindow
         private void StartUnstickWindows(object sender, RoutedEventArgs e)
         {
             service.TryUnstickWithOtherWindows(this);
+        }
+
+        internal List<StickyWindow> GetStickedWindows(List<StickyWindow> existingWindows, List<StickyWindow> newWindows)
+        {
+            if (StickTop is not null && !existingWindows.Contains(StickTop))
+                newWindows.Add(StickTop);
+
+            if (StickRight is not null && !existingWindows.Contains(StickRight))
+                newWindows.Add(StickRight);
+
+            if (StickBottom is not null && !existingWindows.Contains(StickBottom))
+                newWindows.Add(StickBottom);
+
+            if (StickLeft is not null && !existingWindows.Contains(StickLeft))
+                newWindows.Add(StickLeft);
+
+            return newWindows;
         }
 
         #endregion

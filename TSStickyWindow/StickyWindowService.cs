@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Windows;
+using System.Windows.Documents;
 
 namespace TSStickyWindow
 {
@@ -125,12 +126,39 @@ namespace TSStickyWindow
 
         internal void RepositionStickedWindows(StickyWindow source, double deltaX, double deltaY)
         {
-            //bool hasStickedWindows = true;
+            var hasNewWindow = true;
+            var allWindows = new List<StickyWindow> { source };
+            var newWindows = new List<StickyWindow>();
 
-            if (source.StickTop is not null)
+            while (hasNewWindow)
             {
-                source.StickTop.Window.Left += deltaX;
-                source.StickTop.Window.Top += deltaY;
+                foreach (var stickyWindow in allWindows)
+                {
+                    var stickedWindows = stickyWindow.GetStickedWindows(allWindows, newWindows);
+                    foreach (var stickedWindow in stickedWindows)
+                    {
+                        if (!allWindows.Contains(stickedWindow))
+                            newWindows.Add(stickedWindow);
+                    }
+                }
+
+                // Assuming there are only new windows available here at this point
+                allWindows.AddRange(newWindows);
+
+                if (newWindows.Count == 0)
+                    hasNewWindow = false;
+
+                newWindows.Clear();
+            }
+
+            // Remove the source (already moved) window
+            allWindows.Remove(source);
+
+            // And reposition the rest
+            foreach (var stickyWindow in allWindows)
+            {
+                stickyWindow.Window.Left += deltaX;
+                stickyWindow.Window.Top += deltaY;
             }
         }
     }
