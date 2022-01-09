@@ -26,11 +26,11 @@ namespace TSStickyWindow.UISample
 
         private void WindowSticked(WindowStickedMessage message)
         {
-
+            // Todo: Handle the event
         }
         private void WindowUnsticked(WindowUnstickedMessage message)
         {
-
+            // Todo: Handle the event
         }
 
         private void Title_lbl_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)

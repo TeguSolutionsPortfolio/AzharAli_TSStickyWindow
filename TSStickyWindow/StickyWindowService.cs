@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Text.Json;
 using System.Windows;
 using TSStickyWindow.Messages;
 
@@ -47,6 +48,42 @@ namespace TSStickyWindow
         public void AddNewWindow(Window window)
         {
             windows.Add(new StickyWindow(this, window));
+        }
+
+        public string GetLayout()
+        {
+            var layout = new StickyLayout();
+
+            foreach (var window in windows)
+            {
+                var layoutWindow = new StickyLayoutWindow(window.Id)
+                {
+                    WindowType = window.GetType(),
+                    PositionLeft = window.Left,
+                    PositionTop = window.Top,
+                    Width = window.Window.Width,
+                    Height = window.Window.Height
+                };
+
+                if (window.StickTop is not null)
+                    layoutWindow.ConnectionTopId = window.StickTop.Id;
+                if (window.StickRight is not null)
+                    layoutWindow.ConnectionRightId = window.StickRight.Id;
+                if (window.StickBottom is not null)
+                    layoutWindow.ConnectionBottomId = window.StickBottom.Id;
+                if (window.StickLeft is not null)
+                    layoutWindow.ConnectionLeftId = window.StickLeft.Id;
+
+                layout.Windows.Add(layoutWindow);
+            }
+
+            var json = JsonSerializer.Serialize(layout);
+            return json;
+        }
+
+        public void LoadLayout(StickyLayout layout)
+        {
+
         }
 
         #endregion

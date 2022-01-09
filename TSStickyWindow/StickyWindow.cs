@@ -9,7 +9,7 @@ using System.Windows.Media;
 
 namespace TSStickyWindow
 {
-    public class StickyWindow
+    internal class StickyWindow
     {
         private readonly StickyWindowService service;
 
@@ -239,7 +239,6 @@ namespace TSStickyWindow
                 {
                     Window.Left = targetWindow.Left;
                     Window.Top = targetWindow.Bottom;
-                    //Window.Width = targetWindow.Window.Width;
                 }
             }
 
@@ -251,7 +250,6 @@ namespace TSStickyWindow
                 {
                     Window.Left = targetWindow.Left - Window.Width;
                     Window.Top = targetWindow.Top;
-                    //Window.Height = targetWindow.Window.Height;
                 }
             }
 
@@ -263,7 +261,6 @@ namespace TSStickyWindow
                 {
                     Window.Left = targetWindow.Left;
                     Window.Top = targetWindow.Top - Window.Height;
-                    //Window.Width = targetWindow.Window.Width;
                 }
             }
 
@@ -275,7 +272,6 @@ namespace TSStickyWindow
                 {
                     Window.Left = targetWindow.Left + targetWindow.Window.Width;
                     Window.Top = targetWindow.Top;
-                    //Window.Height = targetWindow.Window.Height;
                 }
             }
 
