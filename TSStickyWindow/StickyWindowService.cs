@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Windows;
+using TSStickyWindow.Messages;
 
 namespace TSStickyWindow
 {
@@ -11,12 +12,6 @@ namespace TSStickyWindow
     public class StickyWindowService
     {
         private readonly StickyWindowOptions options;
-
-        /// <summary>
-        /// Lazy solution, better to use dependency injection in production
-        /// </summary>
-        public static StickyWindowService Instance { get; set; }
-
         private readonly List<StickyWindow> windows;
 
         #region Init
@@ -30,6 +25,11 @@ namespace TSStickyWindow
 
         #endregion
 
+        /// <summary>
+        /// Lazy solution, better to use dependency injection in production
+        /// </summary>
+        public static StickyWindowService Instance { get; set; }
+
         #region Id Service
 
         private int biggestGivenId;
@@ -42,10 +42,23 @@ namespace TSStickyWindow
 
         #endregion
 
+        #region Public Functions
+
         public void AddNewWindow(Window window)
         {
             windows.Add(new StickyWindow(this, window));
         }
+
+        #endregion
+
+        #region Public Events
+
+        public Action<WindowStickedMessage> WindowSticked { get; set; }
+        public Action<WindowUnstickedMessage> WindowUnsticked { get; set; }
+
+        #endregion
+
+        #region Internal Functions
 
         internal void TryStickWithOtherWindows(StickyWindow source)
         {
@@ -63,6 +76,8 @@ namespace TSStickyWindow
                     {
                         source.StickWindow(target, StickPosition.Top, true);
                         target.StickWindow(source, StickPosition.Bottom);
+
+                        WindowSticked?.Invoke(new WindowStickedMessage());
                     }
                 }
 
@@ -75,6 +90,8 @@ namespace TSStickyWindow
                     {
                         source.StickWindow(target, StickPosition.Right, true);
                         target.StickWindow(source, StickPosition.Left);
+
+                        WindowSticked?.Invoke(new WindowStickedMessage());
                     }
                 }
 
@@ -87,6 +104,8 @@ namespace TSStickyWindow
                     {
                         source.StickWindow(target, StickPosition.Bottom, true);
                         target.StickWindow(source, StickPosition.Top);
+
+                        WindowSticked?.Invoke(new WindowStickedMessage());
                     }
                 }
 
@@ -99,6 +118,8 @@ namespace TSStickyWindow
                     {
                         source.StickWindow(target, StickPosition.Left, true);
                         target.StickWindow(source, StickPosition.Right);
+
+                        WindowSticked?.Invoke(new WindowStickedMessage());
                     }
                 }
             }
@@ -115,6 +136,8 @@ namespace TSStickyWindow
                 source.UnstickWindow(target);
                 target.UnstickWindow(source);
             }
+
+            WindowUnsticked?.Invoke(new WindowUnstickedMessage());
         }
 
         internal void RemoveWindow(StickyWindow window)
@@ -233,5 +256,7 @@ namespace TSStickyWindow
                 stickyWindow.Window.Height += deltaHeight;
             }
         }
+
+        #endregion
     }
 }

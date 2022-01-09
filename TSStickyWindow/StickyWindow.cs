@@ -133,7 +133,6 @@ namespace TSStickyWindow
 
             if (!isSticking && Window.IsActive)
             {
-
                 var deltaX = Window.Left - lastLeft;
                 var deltaY = Window.Top - lastTop;
 
