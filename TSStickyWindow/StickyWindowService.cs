@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -227,6 +226,8 @@ namespace TSStickyWindow
 
             //Window.OnMouseLeftButtonDown(e);
             Window.DragMove();
+
+            service.TryStickWithOtherWindows(this);
         }
 
         private void WindowOnLocationChanged(object? sender, EventArgs e)
@@ -243,7 +244,7 @@ namespace TSStickyWindow
                 Debug.WriteLine(exception);
             }
 
-            service.TryStickWithOtherWindows(this);
+            //service.TryStickWithOtherWindows(this);
         }
 
         private void WindowOnClosing(object sender, CancelEventArgs e)
@@ -303,7 +304,7 @@ namespace TSStickyWindow
             return true;
         }
         // !! Use after the CanStickWindow validation !!
-        internal async void StickWindow(StickyWindow targetWindow, StickPosition position, bool arrange = false)
+        internal void StickWindow(StickyWindow targetWindow, StickPosition position, bool arrange = false)
         {
             if (position == StickPosition.Top)
             {
@@ -311,9 +312,6 @@ namespace TSStickyWindow
 
                 if (arrange)
                 {
-                    WinAPI.MouseLeftUp(Window);
-                    await Task.Delay(100);
-
                     Window.Left = targetWindow.Left;
                     Window.Top = targetWindow.Bottom;
                     Window.Width = targetWindow.Window.Width;
@@ -326,9 +324,6 @@ namespace TSStickyWindow
 
                 if (arrange)
                 {
-                    WinAPI.MouseLeftUp(Window);
-                    await Task.Delay(100);
-
                     Window.Left = targetWindow.Left - Window.Width;
                     Window.Top = targetWindow.Top;
                     Window.Height = targetWindow.Window.Height;
@@ -341,9 +336,6 @@ namespace TSStickyWindow
 
                 if (arrange)
                 {
-                    WinAPI.MouseLeftUp(Window);
-                    await Task.Delay(100);
-
                     Window.Left = targetWindow.Left;
                     Window.Top = targetWindow.Top - Window.Height;
                     Window.Width = targetWindow.Window.Width;
@@ -356,9 +348,6 @@ namespace TSStickyWindow
 
                 if (arrange)
                 {
-                    WinAPI.MouseLeftUp(Window);
-                    await Task.Delay(100);
-
                     Window.Left = targetWindow.Left + targetWindow.Window.Width;
                     Window.Top = targetWindow.Top;
                     Window.Height = targetWindow.Window.Height;
