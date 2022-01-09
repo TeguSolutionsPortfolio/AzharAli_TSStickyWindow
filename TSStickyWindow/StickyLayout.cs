@@ -22,7 +22,7 @@ namespace TSStickyWindow
 
         public string Id { get; }
 
-        public Type WindowType { get; set; }
+        public string WindowTypeName { get; set; }
 
         public double PositionLeft { get; set; }
         public double PositionTop { get; set; }

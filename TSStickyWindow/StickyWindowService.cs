@@ -56,9 +56,11 @@ namespace TSStickyWindow
 
             foreach (var window in windows)
             {
+                var type = window.GetType();
+
                 var layoutWindow = new StickyLayoutWindow(window.Id)
                 {
-                    WindowType = window.GetType(),
+                    WindowTypeName = window.GetType().Name,
                     PositionLeft = window.Left,
                     PositionTop = window.Top,
                     Width = window.Window.Width,

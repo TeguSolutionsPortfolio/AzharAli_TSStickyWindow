@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.IO;
+using System.Windows;
 using System.Windows.Input;
 using TSStickyWindow.Messages;
 
@@ -47,6 +48,18 @@ namespace TSStickyWindow.UISample
         private void Btn_NewWindow_Click(object sender, RoutedEventArgs e)
         {
             StickyWindowService.Instance.AddNewWindow(new SubWindow());
+        }
+
+
+        private void BtnLoadLayout_OnClick(object sender, RoutedEventArgs e)
+        {
+            
+        }
+
+        private void BtnSaveLayout_OnClick(object sender, RoutedEventArgs e)
+        {
+            var json = StickyWindowService.Instance.GetLayout();
+            File.WriteAllText("tsstickywindowlayouts.txt", json);
         }
     }
 }

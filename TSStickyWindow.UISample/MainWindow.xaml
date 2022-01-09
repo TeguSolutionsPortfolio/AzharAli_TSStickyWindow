@@ -76,7 +76,9 @@
                             <Label Grid.Row="4" Grid.Column="1" Padding="0" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Foreground="White" Content="Bottom:"/>
                             <Label Name="LblPositionBottom" Grid.Row="4" Grid.Column="2" Padding="0" VerticalContentAlignment="Center" Foreground="White"/>
 
+                            <Button Name="BtnLoadLayout" Grid.Row="5" Grid.Column="0" Content="Load Layout" Click="BtnLoadLayout_OnClick"/>
                             <Button Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2" Content="Open New" Click="Btn_NewWindow_Click"/>
+                            <Button Name="BtnSaveLayout" Grid.Row="5" Grid.Column="3" Content="Save Layout" Click="BtnSaveLayout_OnClick"/>
 
                             <!-- Edge Sticked Window Ids -->
                             <Label Name="LblConnectionTopId" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Padding="0" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Foreground="Orange"/>
