@@ -1,4 +1,7 @@
-﻿namespace TSStickyWindow.Layout
+﻿using System.Text.Json.Serialization;
+using System.Windows;
+
+namespace TSStickyWindow.Layout
 {
     public class StickyLayoutWindow
     {
@@ -20,5 +23,8 @@
         public string ConnectionRightId { get; set; }
         public string ConnectionBottomId { get; set; }
         public string ConnectionLeftId { get; set; }
+
+        [JsonIgnore]
+        public Window Window { get; set; }
     }
 }

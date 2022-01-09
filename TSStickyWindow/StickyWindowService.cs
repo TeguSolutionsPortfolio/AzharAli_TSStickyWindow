@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json;
 using System.Windows;
+using System.Windows.Controls;
 using TSStickyWindow.Layout;
 using TSStickyWindow.Messages;
 
@@ -60,11 +61,11 @@ namespace TSStickyWindow
 
             foreach (var window in windows)
             {
-                var type = window.GetType();
+                //var type = window.GetType();
 
                 var layoutWindow = new StickyLayoutWindow(window.Id)
                 {
-                    WindowTypeName = window.GetType().Name,
+                    WindowTypeName = window.GetWindowType(),
                     PositionLeft = window.Left,
                     PositionTop = window.Top,
                     Width = window.Width,
@@ -89,7 +90,36 @@ namespace TSStickyWindow
 
         public void LoadLayout(StickyLayout layout)
         {
+            CloseAllWindows();
 
+            // Step 1 - Initialize and open the windows
+            foreach (var layoutWindow in layout.Windows)
+            {
+                layoutWindow.Window.Left = layoutWindow.PositionLeft;
+                layoutWindow.Window.Top = layoutWindow.PositionTop;
+                layoutWindow.Window.Width = layoutWindow.Width;
+                layoutWindow.Window.Height = layoutWindow.Height;
+                
+                var stickyWindow = new StickyWindow(this, options, layoutWindow.Window)
+                {
+                    Id = layoutWindow.Id
+                };
+
+                windows.Add(stickyWindow);
+                stickyWindow.ShowWindow();
+            }
+
+            // Step 02 - Set the relations
+        }
+
+        private void CloseAllWindows()
+        {
+            foreach (var stickyWindow in windows)
+            {
+                stickyWindow.CloseWindow();
+            }
+
+            windows.Clear();
         }
 
         #endregion

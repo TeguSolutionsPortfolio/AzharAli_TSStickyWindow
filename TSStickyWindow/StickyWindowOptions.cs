@@ -1,4 +1,6 @@
-﻿namespace TSStickyWindow
+﻿using System;
+
+namespace TSStickyWindow
 {
     public class StickyWindowOptions
     {
@@ -30,6 +32,12 @@
 
         public double WindowInitialWidth { get; } = 150;
         public double WindowInitialHeight { get; } = 200;
+
+        /// <summary>
+        /// If the main window is included it needs special handling
+        /// for example don't close or open twice
+        /// </summary>
+        public Type MainWindowType { get; set; }
 
     }
 }

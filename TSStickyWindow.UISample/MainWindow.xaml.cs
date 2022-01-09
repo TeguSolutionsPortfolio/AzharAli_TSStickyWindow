@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Text.Json;
 using System.Windows;
@@ -11,6 +12,7 @@ namespace TSStickyWindow.UISample
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
+    // ReSharper disable once RedundantExtendsListEntry
     public partial class MainWindow : Window
     {
         public MainWindow()
@@ -18,12 +20,11 @@ namespace TSStickyWindow.UISample
             InitializeComponent();
 
             // Todo: initialize the Sticky Window Service with options (optional)
-            StickyWindowService.Instance = new StickyWindowService(new StickyWindowOptions(10, 50, 50))
+            StickyWindowService.Instance = new StickyWindowService(new StickyWindowOptions(10, 50, 50) { MainWindowType = typeof(MainWindow) })
             {
                 WindowSticked = WindowSticked,
-                WindowUnsticked = WindowUnsticked
+                WindowUnsticked = WindowUnsticked,
             };
-
 
             StickyWindowService.Instance.AddNewWindow(this);
 
@@ -68,7 +69,7 @@ namespace TSStickyWindow.UISample
             }
             catch (Exception e)
             {
-                
+                Debug.WriteLine(e);
             }
 
             if (string.IsNullOrWhiteSpace(savedLayout))
@@ -82,6 +83,11 @@ namespace TSStickyWindow.UISample
             try
             {
                 var layout = JsonSerializer.Deserialize<StickyLayout>(savedLayout);
+                foreach (var stickyLayoutWindow in layout!.Windows)
+                {
+                    stickyLayoutWindow.Window = GetWindowByName(stickyLayoutWindow.WindowTypeName);
+                }
+
                 StickyWindowService.Instance.LoadLayout(layout);
             }
             catch (Exception ex)
@@ -108,7 +114,19 @@ namespace TSStickyWindow.UISample
 
         #endregion
 
+        #region Window Type Service
 
+        private Window GetWindowByName(string type)
+        {
+            if (type == nameof(MainWindow))
+                return this;
+            if (type == nameof(SubWindow))
+                return new SubWindow();
+
+            throw new Exception("Window is not registered");
+        }
+
+        #endregion
 
     }
 }

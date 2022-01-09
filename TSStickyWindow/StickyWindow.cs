@@ -44,6 +44,10 @@ namespace TSStickyWindow
 
         private Window window { get; }
 
+        internal string GetWindowType()
+        {
+            return window.GetType().Name;
+        }
         internal void SetWindowWidth(double width)
         {
             if (width < options.WindowMinWidth && width >= 0)
@@ -75,6 +79,17 @@ namespace TSStickyWindow
         internal void SetWindowPositionDiff(double dLeft, double dTop)
         {
             SetWindowPosition(window.Left + dLeft, window.Top + dTop);
+        }
+
+        internal void ShowWindow()
+        {
+            if (window.GetType() != options.MainWindowType)
+                window.Show();
+        }
+        internal void CloseWindow()
+        {
+            if (window.GetType() != options.MainWindowType)
+                window.Close();
         }
 
         #endregion
