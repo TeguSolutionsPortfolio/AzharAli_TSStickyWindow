@@ -1,18 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace TSStickyWindow
+﻿namespace TSStickyWindow.Layout
 {
-    public class StickyLayout
-    {
-        public StickyLayout()
-        {
-            Windows = new List<StickyLayoutWindow>();
-        }
-
-        public List<StickyLayoutWindow> Windows { get; set; }
-    }
-
     public class StickyLayoutWindow
     {
         public StickyLayoutWindow(string id)

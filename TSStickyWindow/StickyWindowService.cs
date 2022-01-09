@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json;
 using System.Windows;
+using TSStickyWindow.Layout;
 using TSStickyWindow.Messages;
 
 namespace TSStickyWindow
@@ -47,6 +48,9 @@ namespace TSStickyWindow
 
         public void AddNewWindow(Window window)
         {
+            window.Width = options.WindowInitialWidth;
+            window.Height = options.WindowInitialHeight;
+
             windows.Add(new StickyWindow(this, window));
         }
 
