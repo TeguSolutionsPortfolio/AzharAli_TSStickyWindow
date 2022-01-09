@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json;
 using System.Windows;
 using System.Windows.Controls;
@@ -110,6 +111,26 @@ namespace TSStickyWindow
             }
 
             // Step 02 - Set the relations
+            foreach (var stickyWindow in windows)
+            {
+                var layoutWindow = layout.Windows.First(lw => lw.Id == stickyWindow.Id);
+
+                if (!string.IsNullOrWhiteSpace(layoutWindow.ConnectionTopId))
+                    stickyWindow.StickWindow(windows.First(w => w.Id == layoutWindow.ConnectionTopId), StickPosition.Top);
+                    //stickyWindow.StickTop = windows.First(w => w.Id == layoutWindow.ConnectionTopId);
+
+                if (!string.IsNullOrWhiteSpace(layoutWindow.ConnectionRightId))
+                    stickyWindow.StickWindow(windows.First(w => w.Id == layoutWindow.ConnectionRightId), StickPosition.Right);
+                //stickyWindow.StickRight = windows.First(w => w.Id == layoutWindow.ConnectionRightId);
+
+                if (!string.IsNullOrWhiteSpace(layoutWindow.ConnectionBottomId))
+                    stickyWindow.StickWindow(windows.First(w => w.Id == layoutWindow.ConnectionBottomId), StickPosition.Bottom);
+                //stickyWindow.StickBottom = windows.First(w => w.Id == layoutWindow.ConnectionBottomId);
+
+                if (!string.IsNullOrWhiteSpace(layoutWindow.ConnectionLeftId))
+                    stickyWindow.StickWindow(windows.First(w => w.Id == layoutWindow.ConnectionLeftId), StickPosition.Left);
+                //stickyWindow.StickLeft = windows.First(w => w.Id == layoutWindow.ConnectionLeftId);
+            }
         }
 
         private void CloseAllWindows()
