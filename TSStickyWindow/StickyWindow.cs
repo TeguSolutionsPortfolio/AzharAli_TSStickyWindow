@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -34,6 +35,14 @@ namespace TSStickyWindow
 
             Id = service.GetNextId();
             lblTitle!.Content = Id;
+
+            Stick = new Dictionary<StickPosition, StickyWindow?>
+            {
+                [StickPosition.Top] = null,
+                [StickPosition.Right] = null,
+                [StickPosition.Bottom] = null,
+                [StickPosition.Left] = null
+            };
 
             this.window.Show();
         }
@@ -269,49 +278,30 @@ namespace TSStickyWindow
 
         #region Sticked Windows Management
 
-        internal StickyWindow? StickTop { get; set; }
-        internal StickyWindow? StickRight { get; set; }
-        internal StickyWindow? StickBottom { get; set; }
-        internal StickyWindow? StickLeft { get; set; }
+        //internal StickyWindow? StickTop { get; set; }
+        //internal StickyWindow? StickRight { get; set; }
+        //internal StickyWindow? StickBottom { get; set; }
+        //internal StickyWindow? StickLeft { get; set; }
+        internal Dictionary<StickPosition, StickyWindow?> Stick { get; set; }
 
         internal bool CanStickWindow(StickyWindow source, StickPosition position)
         {
-            if (StickTop == source || StickRight == source || StickBottom == source || StickLeft == source)
+            if (Stick.ContainsValue(source))
                 return false;
 
-
-            if (position == StickPosition.Top)
-            {
-                if (StickTop is not null)
-                    return false;
-            }
-
-            if (position == StickPosition.Right)
-            {
-                if (StickRight is not null)
-                    return false;
-            }
-
-            if (position == StickPosition.Bottom)
-            {
-                if (StickBottom is not null)
-                    return false;
-            }
-
-            if (position == StickPosition.Left)
-            {
-                if (StickLeft is not null)
-                    return false;
-            }
+            if (Stick[position] is not null)
+                return false;
 
             return true;
         }
         // !! Use after the CanStickWindow validation !!
         internal void StickWindow(StickyWindow targetWindow, StickPosition position, bool arrange = false)
         {
+            Stick[position] = targetWindow;
+
             if (position == StickPosition.Top)
             {
-                StickTop = targetWindow;
+                //StickTop = targetWindow;
 
                 if (arrange)
                 {
@@ -322,7 +312,7 @@ namespace TSStickyWindow
 
             else if (position == StickPosition.Right)
             {
-                StickRight = targetWindow;
+                //StickRight = targetWindow;
 
                 if (arrange)
                 {
@@ -333,7 +323,7 @@ namespace TSStickyWindow
 
             else if (position == StickPosition.Bottom)
             {
-                StickBottom = targetWindow;
+                //StickBottom = targetWindow;
 
                 if (arrange)
                 {
@@ -344,7 +334,7 @@ namespace TSStickyWindow
 
             else if (position == StickPosition.Left)
             {
-                StickLeft = targetWindow;
+                //StickLeft = targetWindow;
 
                 if (arrange)
                 {
@@ -358,21 +348,26 @@ namespace TSStickyWindow
 
         internal void UnstickWindow(StickyWindow targetWindow)
         {
-            if (StickTop == targetWindow)
-                StickTop = null;
-            else if (StickRight == targetWindow)
-                StickRight = null;
-            else if (StickBottom == targetWindow)
-                StickBottom = null;
-            else if (StickLeft == targetWindow)
-                StickLeft = null;
+            var stick = Stick.FirstOrDefault(s => s.Value == targetWindow);
+            Stick[stick.Key] = null;
+
+                
+
+            //if (StickTop == targetWindow)
+            //    StickTop = null;
+            //else if (StickRight == targetWindow)
+            //    StickRight = null;
+            //else if (StickBottom == targetWindow)
+            //    StickBottom = null;
+            //else if (StickLeft == targetWindow)
+            //    StickLeft = null;
 
             HighlightStickState();
         }
 
         private void HighlightStickState()
         {
-            if (StickTop is null)
+            if (Stick[StickPosition.Top] is null)
             {
                 brdTop.BorderBrush = new SolidColorBrush(Colors.DarkGray);
                 lblConnectionTopId.Content = "";
@@ -380,10 +375,10 @@ namespace TSStickyWindow
             else
             {
                 brdTop.BorderBrush = new SolidColorBrush(Colors.Lime);
-                lblConnectionTopId.Content = StickTop.Id;
+                lblConnectionTopId.Content = Stick[StickPosition.Top].Id;
             }
 
-            if (StickRight is null)
+            if (Stick[StickPosition.Right] is null)
             {
                 brdRight.BorderBrush = new SolidColorBrush(Colors.DarkGray);
                 lblConnectionRightId.Content = "";
@@ -391,10 +386,10 @@ namespace TSStickyWindow
             else
             {
                 brdRight.BorderBrush = new SolidColorBrush(Colors.Lime);
-                lblConnectionRightId.Content = StickRight.Id;
+                lblConnectionRightId.Content = Stick[StickPosition.Right].Id;
             }
 
-            if (StickBottom is null)
+            if (Stick[StickPosition.Bottom] is null)
             {
                 brdBottom.BorderBrush = new SolidColorBrush(Colors.DarkGray);
                 lblConnectionBottomId.Content = "";
@@ -402,10 +397,10 @@ namespace TSStickyWindow
             else
             {
                 brdBottom.BorderBrush = new SolidColorBrush(Colors.Lime);
-                lblConnectionBottomId.Content = StickBottom.Id;
+                lblConnectionBottomId.Content = Stick[StickPosition.Bottom].Id;
             }
 
-            if (StickLeft is null)
+            if (Stick[StickPosition.Left] is null)
             {
                 brdLeft.BorderBrush = new SolidColorBrush(Colors.DarkGray);
                 lblConnectionLeftId.Content = "";
@@ -413,10 +408,13 @@ namespace TSStickyWindow
             else
             {
                 brdLeft.BorderBrush = new SolidColorBrush(Colors.Lime);
-                lblConnectionLeftId.Content = StickLeft.Id;
+                lblConnectionLeftId.Content = Stick[StickPosition.Left].Id;
             }
 
-            if (StickTop is not null || StickRight is not null || StickBottom is not null || StickLeft is not null)
+            if (Stick[StickPosition.Top] is not null ||
+                Stick[StickPosition.Right] is not null ||
+                Stick[StickPosition.Bottom] is not null ||
+                Stick[StickPosition.Left] is not null)
                 btnUnstick.Visibility = Visibility.Visible;
             else
                 btnUnstick.Visibility = Visibility.Collapsed;
@@ -431,17 +429,23 @@ namespace TSStickyWindow
         {
             var newWindows = new List<StickyWindow>();
 
-            if (StickTop is not null && !existingWindows.Contains(StickTop))
-                newWindows.Add(StickTop);
+            foreach (var stick in Stick)
+            {
+                if (stick.Value is not null && !existingWindows.Contains(stick.Value))
+                    newWindows.Add(stick.Value);
+            }
 
-            if (StickRight is not null && !existingWindows.Contains(StickRight))
-                newWindows.Add(StickRight);
+            //if (StickTop is not null && !existingWindows.Contains(StickTop))
+            //    newWindows.Add(StickTop);
 
-            if (StickBottom is not null && !existingWindows.Contains(StickBottom))
-                newWindows.Add(StickBottom);
+            //if (StickRight is not null && !existingWindows.Contains(StickRight))
+            //    newWindows.Add(StickRight);
 
-            if (StickLeft is not null && !existingWindows.Contains(StickLeft))
-                newWindows.Add(StickLeft);
+            //if (StickBottom is not null && !existingWindows.Contains(StickBottom))
+            //    newWindows.Add(StickBottom);
+
+            //if (StickLeft is not null && !existingWindows.Contains(StickLeft))
+            //    newWindows.Add(StickLeft);
 
             return newWindows;
         }
@@ -450,11 +454,11 @@ namespace TSStickyWindow
         {
             var newWindows = new List<StickyWindow>();
 
-            if (StickRight is not null && !existingWindows.Contains(StickRight))
-                newWindows.Add(StickRight);
+            if (Stick[StickPosition.Right] is not null && !existingWindows.Contains(Stick[StickPosition.Right]))
+                newWindows.Add(Stick[StickPosition.Right]);
 
-            if (StickLeft is not null && !existingWindows.Contains(StickLeft))
-                newWindows.Add(StickLeft);
+            if (Stick[StickPosition.Left] is not null && !existingWindows.Contains(Stick[StickPosition.Left]))
+                newWindows.Add(Stick[StickPosition.Left]);
 
             return newWindows;
         }
@@ -463,11 +467,17 @@ namespace TSStickyWindow
         {
             var newWindows = new List<StickyWindow>();
 
-            if (StickTop is not null && !existingWindows.Contains(StickTop))
-                newWindows.Add(StickTop);
+            if (Stick[StickPosition.Top] is not null && !existingWindows.Contains(Stick[StickPosition.Top]))
+                newWindows.Add(Stick[StickPosition.Top]);
 
-            if (StickBottom is not null && !existingWindows.Contains(StickBottom))
-                newWindows.Add(StickBottom);
+            if (Stick[StickPosition.Bottom] is not null && !existingWindows.Contains(Stick[StickPosition.Bottom]))
+                newWindows.Add(Stick[StickPosition.Bottom]);
+
+            //if (StickTop is not null && !existingWindows.Contains(StickTop))
+            //    newWindows.Add(StickTop);
+
+            //if (StickBottom is not null && !existingWindows.Contains(StickBottom))
+            //    newWindows.Add(StickBottom);
 
             return newWindows;
         }

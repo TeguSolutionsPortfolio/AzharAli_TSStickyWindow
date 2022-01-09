@@ -70,14 +70,14 @@ namespace TSStickyWindow
                     Height = window.Height
                 };
 
-                if (window.StickTop is not null)
-                    layoutWindow.ConnectionTopId = window.StickTop.Id;
-                if (window.StickRight is not null)
-                    layoutWindow.ConnectionRightId = window.StickRight.Id;
-                if (window.StickBottom is not null)
-                    layoutWindow.ConnectionBottomId = window.StickBottom.Id;
-                if (window.StickLeft is not null)
-                    layoutWindow.ConnectionLeftId = window.StickLeft.Id;
+                if (window.Stick[StickPosition.Top] is not null)
+                    layoutWindow.ConnectionTopId = window.Stick[StickPosition.Top].Id;
+                if (window.Stick[StickPosition.Right] is not null)
+                    layoutWindow.ConnectionRightId = window.Stick[StickPosition.Right].Id;
+                if (window.Stick[StickPosition.Bottom] is not null)
+                    layoutWindow.ConnectionBottomId = window.Stick[StickPosition.Bottom].Id;
+                if (window.Stick[StickPosition.Left] is not null)
+                    layoutWindow.ConnectionLeftId = window.Stick[StickPosition.Left].Id;
 
                 layout.Windows.Add(layoutWindow);
             }
