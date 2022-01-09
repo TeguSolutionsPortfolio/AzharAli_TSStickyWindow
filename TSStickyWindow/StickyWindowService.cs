@@ -51,7 +51,7 @@ namespace TSStickyWindow
             window.Width = options.WindowInitialWidth;
             window.Height = options.WindowInitialHeight;
 
-            windows.Add(new StickyWindow(this, window));
+            windows.Add(new StickyWindow(this, options, window));
         }
 
         public string GetLayout()
@@ -67,8 +67,8 @@ namespace TSStickyWindow
                     WindowTypeName = window.GetType().Name,
                     PositionLeft = window.Left,
                     PositionTop = window.Top,
-                    Width = window.Window.Width,
-                    Height = window.Window.Height
+                    Width = window.Width,
+                    Height = window.Height
                 };
 
                 if (window.StickTop is not null)
@@ -96,8 +96,8 @@ namespace TSStickyWindow
 
         #region Public Events
 
-        public Action<WindowStickedMessage> WindowSticked { get; set; }
-        public Action<WindowUnstickedMessage> WindowUnsticked { get; set; }
+        public Action<WindowStickedMessage>? WindowSticked { get; set; }
+        public Action<WindowUnstickedMessage>? WindowUnsticked { get; set; }
 
         #endregion
 
@@ -221,8 +221,7 @@ namespace TSStickyWindow
             // And reposition the rest
             foreach (var stickyWindow in allWindows)
             {
-                stickyWindow.Window.Left += deltaX;
-                stickyWindow.Window.Top += deltaY;
+                stickyWindow.SetWindowPositionDiff(deltaX, deltaY);
             }
         }
 
@@ -259,7 +258,7 @@ namespace TSStickyWindow
             // And reposition the rest
             foreach (var stickyWindow in allWindows)
             {
-                stickyWindow.Window.Width += deltaWidth;
+                stickyWindow.SetWindowWidthDiff(deltaWidth);
             }
         }
 
@@ -296,7 +295,7 @@ namespace TSStickyWindow
             // And reposition the rest
             foreach (var stickyWindow in allWindows)
             {
-                stickyWindow.Window.Height += deltaHeight;
+                stickyWindow.SetWindowHeightDiff(deltaHeight);
             }
         }
 
