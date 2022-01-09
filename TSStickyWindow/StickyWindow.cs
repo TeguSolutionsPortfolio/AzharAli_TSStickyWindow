@@ -337,8 +337,10 @@ namespace TSStickyWindow
             service.TryUnstickWithOtherWindows(this);
         }
 
-        internal List<StickyWindow> GetStickedWindows(List<StickyWindow> existingWindows, List<StickyWindow> newWindows)
+        internal List<StickyWindow> GetStickedWindows(List<StickyWindow> existingWindows/*, List<StickyWindow> newWindows*/)
         {
+            var newWindows = new List<StickyWindow>();
+
             if (StickTop is not null && !existingWindows.Contains(StickTop))
                 newWindows.Add(StickTop);
 

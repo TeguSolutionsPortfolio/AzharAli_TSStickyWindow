@@ -134,7 +134,7 @@ namespace TSStickyWindow
             {
                 foreach (var stickyWindow in allWindows)
                 {
-                    var stickedWindows = stickyWindow.GetStickedWindows(allWindows, newWindows);
+                    var stickedWindows = stickyWindow.GetStickedWindows(allWindows/*, newWindows*/);
                     foreach (var stickedWindow in stickedWindows)
                     {
                         if (!allWindows.Contains(stickedWindow))
