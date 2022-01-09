@@ -12,6 +12,9 @@ namespace TSStickyWindow.UISample
         {
             InitializeComponent();
 
+            // Todo: initialize the Sticky Window Service with options (optional)
+            StickyWindowService.Instance = new StickyWindowService(new StickyWindowOptions(10, 50, 50));
+
             StickyWindowService.Instance.AddNewWindow(this);
         }
 

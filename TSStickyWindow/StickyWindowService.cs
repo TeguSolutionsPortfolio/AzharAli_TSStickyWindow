@@ -10,22 +10,21 @@ namespace TSStickyWindow
     /// </summary>
     public class StickyWindowService
     {
-        /// <summary>
-        /// Connection Offset - the maximum distance between Windows to stick them in pixels
-        /// </summary>
-        private const int offset = 10;
+        private readonly StickyWindowOptions options;
 
         /// <summary>
         /// Lazy solution, better to use dependency injection in production
         /// </summary>
-        public static StickyWindowService Instance { get; } = new();
+        public static StickyWindowService Instance { get; set; }
 
         private readonly List<StickyWindow> windows;
 
         #region Init
 
-        public StickyWindowService()
+        public StickyWindowService(StickyWindowOptions? options = null)
         {
+            this.options = options ?? new StickyWindowOptions();
+
             windows = new List<StickyWindow>();
         }
 
@@ -56,7 +55,7 @@ namespace TSStickyWindow
                     continue;
 
                 // Source Top Edge
-                if (Math.Abs(target.Bottom - source.Top) < offset &&
+                if (Math.Abs(target.Bottom - source.Top) < options.SnapOffset &&
                     target.Left <= source.Right &&
                     target.Right >= source.Left)
                 {
@@ -68,7 +67,7 @@ namespace TSStickyWindow
                 }
 
                 // Source Right Edge
-                else if (Math.Abs(target.Left - source.Right) < offset &&
+                else if (Math.Abs(target.Left - source.Right) < options.SnapOffset &&
                          target.Top <= source.Bottom &&
                          target.Bottom >= source.Top)
                 {
@@ -80,7 +79,7 @@ namespace TSStickyWindow
                 }
 
                 // Source Bottom Edge
-                if (Math.Abs(target.Top - source.Bottom) < offset &&
+                if (Math.Abs(target.Top - source.Bottom) < options.SnapOffset &&
                     target.Left <= source.Right &&
                     target.Right >= source.Left)
                 {
@@ -92,7 +91,7 @@ namespace TSStickyWindow
                 }
 
                 // Source Left Edge
-                else if (Math.Abs(target.Right - source.Left) < offset &&
+                else if (Math.Abs(target.Right - source.Left) < options.SnapOffset &&
                          target.Top <= source.Bottom &&
                          target.Bottom >= source.Top)
                 {
