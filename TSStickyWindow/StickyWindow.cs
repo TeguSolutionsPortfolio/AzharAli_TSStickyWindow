@@ -20,18 +20,21 @@ namespace TSStickyWindow
         public StickyWindow(StickyWindowService windowService, Window window)
         {
             service = windowService;
-            this.Window = window;
+            Window = window;
 
-            this.Window.LocationChanged += WindowOnLocationChanged;
-            this.Window.Closing += WindowOnClosing;
+            Window.LocationChanged += WindowOnLocationChanged;
+            Window.SizeChanged += WindowOnSizeChanged;
+            Window.Closing += WindowOnClosing;
 
             SetWindowControls();
 
             Id = service.GetNextId();
             lblTitle!.Content = Id;
 
-            this.Window.Show();
+            Window.Show();
         }
+
+
 
         #endregion
 
@@ -100,7 +103,7 @@ namespace TSStickyWindow
         #region Window Events
 
         private bool isSticking;
-        private bool isDraggedWindow;
+        //private bool isActiveWindow;
 
         private void LblTitleMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
@@ -109,11 +112,11 @@ namespace TSStickyWindow
 
             SetLastWindowPosition();
 
-            isDraggedWindow = true;
+            //isActiveWindow = true;
             //Window.OnMouseLeftButtonDown(e);
             Window.DragMove();
 
-            isDraggedWindow = false;
+            //isActiveWindow = false;
 
             isSticking = true;
             service.TryStickWithOtherWindows(this);
@@ -134,7 +137,7 @@ namespace TSStickyWindow
                 Debug.WriteLine(exception);
             }
 
-            if (!isSticking && isDraggedWindow)
+            if (!isSticking && /*isActiveWindow*/ Window.IsActive)
             {
 
                 var deltaX = Window.Left - lastLeft;
@@ -147,10 +150,30 @@ namespace TSStickyWindow
             }
         }
 
+        private void WindowOnSizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            if (!Window.IsActive)
+                return;
+
+            if (e.HeightChanged)
+            {
+                service.ResizeStickedWindowsHeight(this, e.NewSize.Height - e.PreviousSize.Height);
+            }
+            else if (e.WidthChanged)
+            {
+                service.ResizeStickedWindowsWidth(this, e.NewSize.Width - e.PreviousSize.Width);
+            }
+        }
+
         private void WindowOnClosing(object sender, CancelEventArgs e)
         {
             service.TryUnstickWithOtherWindows(this);
             service.RemoveWindow(this);
+
+            // Cleanup the events
+            Window.LocationChanged -= WindowOnLocationChanged;
+            Window.SizeChanged -= WindowOnSizeChanged;
+            Window.Closing -= WindowOnClosing;
         }
 
         #endregion
@@ -337,7 +360,7 @@ namespace TSStickyWindow
             service.TryUnstickWithOtherWindows(this);
         }
 
-        internal List<StickyWindow> GetStickedWindows(List<StickyWindow> existingWindows/*, List<StickyWindow> newWindows*/)
+        internal List<StickyWindow> GetAllStickedWindows(List<StickyWindow> existingWindows)
         {
             var newWindows = new List<StickyWindow>();
 
@@ -352,6 +375,32 @@ namespace TSStickyWindow
 
             if (StickLeft is not null && !existingWindows.Contains(StickLeft))
                 newWindows.Add(StickLeft);
+
+            return newWindows;
+        }
+
+        internal List<StickyWindow> GetHorizontalStickedWindows(List<StickyWindow> existingWindows)
+        {
+            var newWindows = new List<StickyWindow>();
+
+            if (StickRight is not null && !existingWindows.Contains(StickRight))
+                newWindows.Add(StickRight);
+
+            if (StickLeft is not null && !existingWindows.Contains(StickLeft))
+                newWindows.Add(StickLeft);
+
+            return newWindows;
+        }
+
+        internal List<StickyWindow> GetVerticalStickedWindows(List<StickyWindow> existingWindows)
+        {
+            var newWindows = new List<StickyWindow>();
+
+            if (StickTop is not null && !existingWindows.Contains(StickTop))
+                newWindows.Add(StickTop);
+
+            if (StickBottom is not null && !existingWindows.Contains(StickBottom))
+                newWindows.Add(StickBottom);
 
             return newWindows;
         }

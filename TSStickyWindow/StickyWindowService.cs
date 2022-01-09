@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Windows;
-using System.Windows.Documents;
 
 namespace TSStickyWindow
 {
@@ -134,7 +133,7 @@ namespace TSStickyWindow
             {
                 foreach (var stickyWindow in allWindows)
                 {
-                    var stickedWindows = stickyWindow.GetStickedWindows(allWindows/*, newWindows*/);
+                    var stickedWindows = stickyWindow.GetAllStickedWindows(allWindows/*, newWindows*/);
                     foreach (var stickedWindow in stickedWindows)
                     {
                         if (!allWindows.Contains(stickedWindow))
@@ -159,6 +158,80 @@ namespace TSStickyWindow
             {
                 stickyWindow.Window.Left += deltaX;
                 stickyWindow.Window.Top += deltaY;
+            }
+        }
+
+        internal void ResizeStickedWindowsWidth(StickyWindow source, double deltaWidth)
+        {
+            var hasNewWindow = true;
+            var allWindows = new List<StickyWindow> { source };
+            var newWindows = new List<StickyWindow>();
+
+            while (hasNewWindow)
+            {
+                foreach (var stickyWindow in allWindows)
+                {
+                    var stickedWindows = stickyWindow.GetVerticalStickedWindows(allWindows/*, newWindows*/);
+                    foreach (var stickedWindow in stickedWindows)
+                    {
+                        if (!allWindows.Contains(stickedWindow))
+                            newWindows.Add(stickedWindow);
+                    }
+                }
+
+                // Assuming there are only new windows available here at this point
+                allWindows.AddRange(newWindows);
+
+                if (newWindows.Count == 0)
+                    hasNewWindow = false;
+
+                newWindows.Clear();
+            }
+
+            // Remove the source (already moved) window
+            allWindows.Remove(source);
+
+            // And reposition the rest
+            foreach (var stickyWindow in allWindows)
+            {
+                stickyWindow.Window.Width += deltaWidth;
+            }
+        }
+
+        internal void ResizeStickedWindowsHeight(StickyWindow source, double deltaHeight)
+        {
+            var hasNewWindow = true;
+            var allWindows = new List<StickyWindow> { source };
+            var newWindows = new List<StickyWindow>();
+
+            while (hasNewWindow)
+            {
+                foreach (var stickyWindow in allWindows)
+                {
+                    var stickedWindows = stickyWindow.GetHorizontalStickedWindows(allWindows/*, newWindows*/);
+                    foreach (var stickedWindow in stickedWindows)
+                    {
+                        if (!allWindows.Contains(stickedWindow))
+                            newWindows.Add(stickedWindow);
+                    }
+                }
+
+                // Assuming there are only new windows available here at this point
+                allWindows.AddRange(newWindows);
+
+                if (newWindows.Count == 0)
+                    hasNewWindow = false;
+
+                newWindows.Clear();
+            }
+
+            // Remove the source (already moved) window
+            allWindows.Remove(source);
+
+            // And reposition the rest
+            foreach (var stickyWindow in allWindows)
+            {
+                stickyWindow.Window.Height += deltaHeight;
             }
         }
     }
