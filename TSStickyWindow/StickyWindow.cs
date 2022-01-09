@@ -88,7 +88,7 @@ namespace TSStickyWindow
         }
         internal void CloseWindow()
         {
-            if (window.GetType() != options.MainWindowType)
+            if (options.MainWindowType is not null && window.GetType() != options.MainWindowType)
                 window.Close();
         }
 

@@ -37,7 +37,7 @@ namespace TSStickyWindow
         /// If the main window is included it needs special handling
         /// for example don't close or open twice
         /// </summary>
-        public Type MainWindowType { get; set; }
+        public Type? MainWindowType { get; set; }
 
     }
 }

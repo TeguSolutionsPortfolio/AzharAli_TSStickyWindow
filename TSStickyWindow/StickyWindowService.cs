@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using System.Windows;
-using System.Windows.Controls;
 using TSStickyWindow.Layout;
 using TSStickyWindow.Messages;
 
@@ -117,30 +116,29 @@ namespace TSStickyWindow
 
                 if (!string.IsNullOrWhiteSpace(layoutWindow.ConnectionTopId))
                     stickyWindow.StickWindow(windows.First(w => w.Id == layoutWindow.ConnectionTopId), StickPosition.Top);
-                    //stickyWindow.StickTop = windows.First(w => w.Id == layoutWindow.ConnectionTopId);
 
                 if (!string.IsNullOrWhiteSpace(layoutWindow.ConnectionRightId))
                     stickyWindow.StickWindow(windows.First(w => w.Id == layoutWindow.ConnectionRightId), StickPosition.Right);
-                //stickyWindow.StickRight = windows.First(w => w.Id == layoutWindow.ConnectionRightId);
 
                 if (!string.IsNullOrWhiteSpace(layoutWindow.ConnectionBottomId))
                     stickyWindow.StickWindow(windows.First(w => w.Id == layoutWindow.ConnectionBottomId), StickPosition.Bottom);
-                //stickyWindow.StickBottom = windows.First(w => w.Id == layoutWindow.ConnectionBottomId);
 
                 if (!string.IsNullOrWhiteSpace(layoutWindow.ConnectionLeftId))
                     stickyWindow.StickWindow(windows.First(w => w.Id == layoutWindow.ConnectionLeftId), StickPosition.Left);
-                //stickyWindow.StickLeft = windows.First(w => w.Id == layoutWindow.ConnectionLeftId);
             }
         }
 
         private void CloseAllWindows()
         {
-            foreach (var stickyWindow in windows)
+            // Note: create a separate list, because the window closing event triggers the RemoveWindow
+            // which modifies the collection and leads to errors..
+            var closingWindows = windows.ToList();
+            windows.Clear();
+
+            foreach (var stickyWindow in closingWindows)
             {
                 stickyWindow.CloseWindow();
             }
-
-            windows.Clear();
         }
 
         #endregion
