@@ -61,8 +61,6 @@ namespace TSStickyWindow
 
             foreach (var window in windows)
             {
-                //var type = window.GetType();
-
                 var layoutWindow = new StickyLayoutWindow(window.Id)
                 {
                     WindowTypeName = window.GetWindowType(),
@@ -92,7 +90,7 @@ namespace TSStickyWindow
         {
             CloseAllWindows();
 
-            // Step 1 - Initialize and open the windows
+            // Step 01 - Initialize and open the windows
             foreach (var layoutWindow in layout.Windows)
             {
                 layoutWindow.Window.Left = layoutWindow.PositionLeft;
