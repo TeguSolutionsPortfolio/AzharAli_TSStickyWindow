@@ -126,19 +126,6 @@ namespace TSStickyWindow
             }
         }
 
-        private void CloseAllWindows()
-        {
-            // Note: create a separate list, because the window closing event triggers the RemoveWindow
-            // which modifies the collection and leads to errors..
-            var closingWindows = windows.ToList();
-            windows.Clear();
-
-            foreach (var stickyWindow in closingWindows)
-            {
-                stickyWindow.CloseWindow();
-            }
-        }
-
         #endregion
 
         #region Public Events
@@ -343,6 +330,19 @@ namespace TSStickyWindow
             foreach (var stickyWindow in allWindows)
             {
                 stickyWindow.SetWindowHeightDiff(deltaHeight);
+            }
+        }
+
+        private void CloseAllWindows()
+        {
+            // Note: create a separate list, because the window closing event triggers the RemoveWindow
+            // which modifies the collection and leads to errors..
+            var closingWindows = windows.ToList();
+            windows.Clear();
+
+            foreach (var stickyWindow in closingWindows)
+            {
+                stickyWindow.CloseWindow();
             }
         }
 
