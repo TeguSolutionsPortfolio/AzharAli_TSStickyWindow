@@ -4,6 +4,7 @@ using System.Windows.Input;
 
 namespace TSStickyWindow
 {
+    // Todo: delete if low level WinApi is not needed
     public static class WinAPI
     {
         //private const int MOUSEEVENTF_LEFTUP = 0x04;

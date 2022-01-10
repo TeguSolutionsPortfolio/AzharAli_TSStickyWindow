@@ -6,7 +6,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
+using TSStickyWindow.Development;
 
 namespace TSStickyWindow
 {
@@ -14,6 +14,7 @@ namespace TSStickyWindow
     {
         private readonly StickyWindowService service;
         private readonly StickyWindowOptions options;
+        private readonly StickyWindowTestControls testControls;
 
         internal string Id { get; set; }
 
@@ -25,6 +26,8 @@ namespace TSStickyWindow
         {
             service = stickyService;
             options = stickyOptions;
+            testControls = new StickyWindowTestControls(this, window);
+
             this.window = window;
 
             this.window.LocationChanged += WindowOnLocationChanged;
@@ -106,25 +109,8 @@ namespace TSStickyWindow
         #region Window Position Controls (for testing)
 
         // Production controls
-        private Button btnUnstick;
-
-        // Test Controls (removable in production)
-        private Border brdTop;
-        private Border brdRight;
-        private Border brdBottom;
-        private Border brdLeft;
-
         private Label lblTitle;
-
-        private Label lblConnectionTopId;
-        private Label lblConnectionRightId;
-        private Label lblConnectionBottomId;
-        private Label lblConnectionLeftId;
-
-        private Label positionLeft;
-        private Label positionTop;
-        private Label positionRight;
-        private Label positionBottom;
+        private Button btnUnstick;
 
         private void SetWindowControls()
         {
@@ -134,23 +120,7 @@ namespace TSStickyWindow
                 btnUnstick = window.FindName("BtnUnstick") as Button ?? new Button();
                 btnUnstick.Click += StartUnstickWindows;
 
-                // Test Controls (removable in production)
-                brdTop = window.FindName("BrdTop") as Border ?? new Border();
-                brdRight = window.FindName("BrdRight") as Border ?? new Border();
-                brdBottom = window.FindName("BrdBottom") as Border ?? new Border();
-                brdLeft = window.FindName("BrdLeft") as Border ?? new Border();
-
                 lblTitle = window.FindName("LblTitle") as Label ?? new Label();
-
-                lblConnectionTopId = window.FindName("LblConnectionTopId") as Label ?? new Label();
-                lblConnectionRightId = window.FindName("LblConnectionRightId") as Label ?? new Label();
-                lblConnectionBottomId = window.FindName("LblConnectionBottomId") as Label ?? new Label();
-                lblConnectionLeftId = window.FindName("LblConnectionLeftId") as Label ?? new Label();
-
-                positionLeft = window.FindName("LblPositionLeft") as Label ?? new Label();
-                positionTop = window.FindName("LblPositionTop") as Label ?? new Label();
-                positionRight = window.FindName("LblPositionRight") as Label ?? new Label();
-                positionBottom = window.FindName("LblPositionBottom") as Label ?? new Label();
 
                 // Custom event handlers
                 lblTitle.PreviewMouseLeftButtonDown += LblTitleMouseLeftButtonDown;
@@ -158,21 +128,6 @@ namespace TSStickyWindow
             catch (Exception e)
             {
                 Debug.WriteLine(e);
-            }
-        }
-
-        private void UpdatePositionLabels()
-        {
-            try
-            {
-                positionLeft.Content = Left.ToString("0");
-                positionTop.Content = Top.ToString("0");
-                positionRight.Content = Right.ToString("0");
-                positionBottom.Content = Bottom.ToString("0");
-            }
-            catch (Exception exception)
-            {
-                Debug.WriteLine(exception);
             }
         }
 
@@ -199,7 +154,7 @@ namespace TSStickyWindow
 
         private void WindowOnLocationChanged(object? sender, EventArgs e)
         {
-            UpdatePositionLabels();
+            testControls.UpdatePositionLabels();
 
             if (!isSticking && window.IsActive)
             {
@@ -239,7 +194,7 @@ namespace TSStickyWindow
                 service.ResizeStickedWindowsWidth(this, e.NewSize.Width - e.PreviousSize.Width);
             }
 
-            UpdatePositionLabels();
+            testControls.UpdatePositionLabels();
         }
 
         private void WindowOnClosing(object sender, CancelEventArgs e)
@@ -363,49 +318,8 @@ namespace TSStickyWindow
 
         private void HighlightStickState()
         {
-            if (Stick[StickPosition.Top] is null)
-            {
-                brdTop.BorderBrush = new SolidColorBrush(Colors.DarkGray);
-                lblConnectionTopId.Content = "";
-            }
-            else
-            {
-                brdTop.BorderBrush = new SolidColorBrush(Colors.Lime);
-                lblConnectionTopId.Content = Stick[StickPosition.Top].Id;
-            }
+            testControls.HighlightStickState();
 
-            if (Stick[StickPosition.Right] is null)
-            {
-                brdRight.BorderBrush = new SolidColorBrush(Colors.DarkGray);
-                lblConnectionRightId.Content = "";
-            }
-            else
-            {
-                brdRight.BorderBrush = new SolidColorBrush(Colors.Lime);
-                lblConnectionRightId.Content = Stick[StickPosition.Right].Id;
-            }
-
-            if (Stick[StickPosition.Bottom] is null)
-            {
-                brdBottom.BorderBrush = new SolidColorBrush(Colors.DarkGray);
-                lblConnectionBottomId.Content = "";
-            }
-            else
-            {
-                brdBottom.BorderBrush = new SolidColorBrush(Colors.Lime);
-                lblConnectionBottomId.Content = Stick[StickPosition.Bottom].Id;
-            }
-
-            if (Stick[StickPosition.Left] is null)
-            {
-                brdLeft.BorderBrush = new SolidColorBrush(Colors.DarkGray);
-                lblConnectionLeftId.Content = "";
-            }
-            else
-            {
-                brdLeft.BorderBrush = new SolidColorBrush(Colors.Lime);
-                lblConnectionLeftId.Content = Stick[StickPosition.Left].Id;
-            }
 
             if (Stick[StickPosition.Top] is not null ||
                 Stick[StickPosition.Right] is not null ||
