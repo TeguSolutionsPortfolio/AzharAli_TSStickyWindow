@@ -93,24 +93,21 @@ namespace TSStickyWindow
             window.Left = left;
             window.Top = top;
         }
-        internal List<string> SetWindowPositionDiff(List<string> ids, double dLeft, double dTop)
+        internal List<string> SetWindowPositionDiff(List<string> handledIds, double deltaX, double deltaY)
         {
-            if (ids.Contains(Id))
-                return ids;
-            ids.Add(Id);
+            if (handledIds.Contains(Id))
+                return handledIds;
+            handledIds.Add(Id);
 
-            SetWindowPosition(window.Left + dLeft, window.Top + dTop);
+            SetWindowPosition(window.Left + deltaX, window.Top + deltaY);
 
-            if (Stick[StickPosition.Top] is not null)
-                ids = Stick[StickPosition.Top]!.SetWindowPositionDiff(ids, dLeft, dTop);
-            if (Stick[StickPosition.Right] is not null)
-                ids = Stick[StickPosition.Right]!.SetWindowPositionDiff(ids, dLeft, dTop);
-            if (Stick[StickPosition.Bottom] is not null)
-                ids = Stick[StickPosition.Bottom]!.SetWindowPositionDiff(ids, dLeft, dTop);
-            if (Stick[StickPosition.Left] is not null)
-                ids = Stick[StickPosition.Left]!.SetWindowPositionDiff(ids, dLeft, dTop);
+            foreach (var (_, stickyWindow) in Stick)
+            {
+                if (stickyWindow is not null)
+                    handledIds = stickyWindow.SetWindowPositionDiff(handledIds, deltaX, deltaY);
+            }
 
-            return ids;
+            return handledIds;
         }
 
         internal void ShowWindow()
@@ -182,17 +179,12 @@ namespace TSStickyWindow
                 var deltaY = window.Top - lastTop;
 
                 var handledIds = new List<string> { Id };
+                foreach (var (_, stickyWindow) in Stick)
+                {
+                    if (stickyWindow is not null)
+                        handledIds = stickyWindow.SetWindowPositionDiff(handledIds, deltaX, deltaY);
+                }
 
-                if (Stick[StickPosition.Top] is not null)
-                    handledIds = Stick[StickPosition.Top]!.SetWindowPositionDiff(handledIds, deltaX, deltaY);
-                if (Stick[StickPosition.Right] is not null)
-                    handledIds = Stick[StickPosition.Right]!.SetWindowPositionDiff(handledIds, deltaX, deltaY);
-                if (Stick[StickPosition.Bottom] is not null)
-                    handledIds = Stick[StickPosition.Bottom]!.SetWindowPositionDiff(handledIds, deltaX, deltaY);
-                if (Stick[StickPosition.Left] is not null)
-                    Stick[StickPosition.Left]!.SetWindowPositionDiff(handledIds, deltaX, deltaY);
-
-                //service.RepositionStickedWindows(this, deltaX, deltaY);
                 SetLastWindowPosition();
             }
         }
