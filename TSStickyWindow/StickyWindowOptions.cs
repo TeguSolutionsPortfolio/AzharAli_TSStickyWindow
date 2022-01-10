@@ -6,7 +6,8 @@ namespace TSStickyWindow
     {
         public StickyWindowOptions(int? snapOffset = null, 
             double? windowMinWidth = null, double? windowMinHeight = null,
-            double? windowInitWidth = null, double? windowInitHeight = null)
+            double? windowInitWidth = null, double? windowInitHeight = null,
+            string? labelTitleName = null, string buttonUnstickName = null)
         {
             if (snapOffset is not null)
                 SnapOffset = snapOffset.Value;
@@ -20,6 +21,11 @@ namespace TSStickyWindow
                 WindowInitialWidth = windowInitWidth.Value;
             if (windowInitHeight is not null)
                 WindowInitialHeight = windowInitHeight.Value;
+
+            if (!string.IsNullOrWhiteSpace(labelTitleName))
+                LabelTitleName = labelTitleName;
+            if (!string.IsNullOrWhiteSpace(buttonUnstickName))
+                ButtonUnstickName = buttonUnstickName;
         }
 
         /// <summary>
@@ -38,6 +44,9 @@ namespace TSStickyWindow
         /// for example don't close or open twice
         /// </summary>
         public Type? MainWindowType { get; set; }
+
+        public string LabelTitleName { get; set; } = "LblTitle";
+        public string ButtonUnstickName { get; set; } = "BtnUnstick";
 
     }
 }
