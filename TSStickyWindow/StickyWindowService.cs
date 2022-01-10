@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using System.Windows;
+using TSStickyWindow.Definitions;
 using TSStickyWindow.Layout;
 using TSStickyWindow.Messages;
 

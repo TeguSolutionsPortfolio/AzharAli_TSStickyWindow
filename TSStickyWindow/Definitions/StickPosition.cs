@@ -1,6 +1,6 @@
-namespace TSStickyWindow
+namespace TSStickyWindow.Definitions
 {
-    public enum StickPosition
+    internal enum StickPosition
     {
         Top = 0,
         Right = 1,
