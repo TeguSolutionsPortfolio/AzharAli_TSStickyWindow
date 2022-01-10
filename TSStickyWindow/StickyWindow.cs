@@ -192,8 +192,13 @@ namespace TSStickyWindow
         private void WindowOnSizeChanged(object sender, SizeChangedEventArgs e)
         {
             if (!window.IsActive)
+            {
+                SetLastWindowPosition();
                 return;
+            }
 
+
+            
             if (e.HeightChanged)
             {
                 if (e.NewSize.Height <= options.WindowMinHeight)
@@ -202,19 +207,25 @@ namespace TSStickyWindow
                     return;
                 }
 
-                //service.ResizeStickedWindowsHeight(this, e.NewSize.Height - e.PreviousSize.Height);
-
                 // Resized from the Top
                 if (window.Top != lastTop)
                 {
                     // Resize the vertical windows
+
                     // Move the top windows
+                    var handledIds = new List<string> { Id };
+                    if (Stick[StickPosition.Top] is not null)
+                        Stick[StickPosition.Top]!.SetWindowPositionDiff(handledIds, 0, Top - lastTop);
                 }
                 // Resized from the Bottom
                 else
                 {
                     // Resize the vertical windows
+
                     // Move the bottom windows
+                    var handledIds = new List<string> { Id };
+                    if (Stick[StickPosition.Bottom] is not null)
+                        Stick[StickPosition.Bottom]!.SetWindowPositionDiff(handledIds, 0, Bottom - lastBottom);
                 }
             }
             else if (e.WidthChanged)
@@ -231,13 +242,21 @@ namespace TSStickyWindow
                 if (window.Left != lastLeft)
                 {
                     // Resize the horizontal windows
+
                     // Move the left windows
+                    var handledIds = new List<string> { Id };
+                    if (Stick[StickPosition.Left] is not null)
+                        Stick[StickPosition.Left]!.SetWindowPositionDiff(handledIds, Left - lastLeft, 0);
                 }
                 // Resized from the Right
                 else
                 {
                     // Resize the horizontal windows
+
                     // Move the right windows
+                    var handledIds = new List<string> { Id };
+                    if (Stick[StickPosition.Right] is not null)
+                        Stick[StickPosition.Right]!.SetWindowPositionDiff(handledIds, Right - lastRight, 0);
                 }
             }
 
@@ -263,6 +282,8 @@ namespace TSStickyWindow
 
         private double lastLeft;
         private double lastTop;
+        private double lastRight;
+        private double lastBottom;
 
         /// <summary>
         /// Call after Location change & Size change
@@ -271,6 +292,8 @@ namespace TSStickyWindow
         {
             lastLeft = window.Left;
             lastTop = window.Top;
+            lastRight = window.Left + window.Width;
+            lastBottom = window.Top + window.Height;
         }
 
         public double Left => window.Left;
