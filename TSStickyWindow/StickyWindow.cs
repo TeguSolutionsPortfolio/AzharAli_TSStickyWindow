@@ -278,10 +278,6 @@ namespace TSStickyWindow
 
         #region Sticked Windows Management
 
-        //internal StickyWindow? StickTop { get; set; }
-        //internal StickyWindow? StickRight { get; set; }
-        //internal StickyWindow? StickBottom { get; set; }
-        //internal StickyWindow? StickLeft { get; set; }
         internal Dictionary<StickPosition, StickyWindow?> Stick { get; set; }
 
         internal bool CanStickWindow(StickyWindow source, StickPosition position)
@@ -429,23 +425,11 @@ namespace TSStickyWindow
         {
             var newWindows = new List<StickyWindow>();
 
-            foreach (var stick in Stick)
+            foreach (var (_, swindow) in Stick)
             {
-                if (stick.Value is not null && !existingWindows.Contains(stick.Value))
-                    newWindows.Add(stick.Value);
+                if (swindow is not null && !existingWindows.Contains(swindow))
+                    newWindows.Add(swindow);
             }
-
-            //if (StickTop is not null && !existingWindows.Contains(StickTop))
-            //    newWindows.Add(StickTop);
-
-            //if (StickRight is not null && !existingWindows.Contains(StickRight))
-            //    newWindows.Add(StickRight);
-
-            //if (StickBottom is not null && !existingWindows.Contains(StickBottom))
-            //    newWindows.Add(StickBottom);
-
-            //if (StickLeft is not null && !existingWindows.Contains(StickLeft))
-            //    newWindows.Add(StickLeft);
 
             return newWindows;
         }
@@ -472,12 +456,6 @@ namespace TSStickyWindow
 
             if (Stick[StickPosition.Bottom] is not null && !existingWindows.Contains(Stick[StickPosition.Bottom]))
                 newWindows.Add(Stick[StickPosition.Bottom]);
-
-            //if (StickTop is not null && !existingWindows.Contains(StickTop))
-            //    newWindows.Add(StickTop);
-
-            //if (StickBottom is not null && !existingWindows.Contains(StickBottom))
-            //    newWindows.Add(StickBottom);
 
             return newWindows;
         }
