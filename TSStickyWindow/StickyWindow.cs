@@ -202,7 +202,20 @@ namespace TSStickyWindow
                     return;
                 }
 
-                service.ResizeStickedWindowsHeight(this, e.NewSize.Height - e.PreviousSize.Height);
+                //service.ResizeStickedWindowsHeight(this, e.NewSize.Height - e.PreviousSize.Height);
+
+                // Resized from the Top
+                if (window.Top != lastTop)
+                {
+                    // Resize the vertical windows
+                    // Move the top windows
+                }
+                // Resized from the Bottom
+                else
+                {
+                    // Resize the vertical windows
+                    // Move the bottom windows
+                }
             }
             else if (e.WidthChanged)
             {
@@ -212,8 +225,23 @@ namespace TSStickyWindow
                     return;
                 }
 
-                service.ResizeStickedWindowsWidth(this, e.NewSize.Width - e.PreviousSize.Width);
+                //service.ResizeStickedWindowsWidth(this, e.NewSize.Width - e.PreviousSize.Width);
+
+                // Resized from the Left
+                if (window.Left != lastLeft)
+                {
+                    // Resize the horizontal windows
+                    // Move the left windows
+                }
+                // Resized from the Right
+                else
+                {
+                    // Resize the horizontal windows
+                    // Move the right windows
+                }
             }
+
+            SetLastWindowPosition();
 
             testControls.UpdatePositionLabels();
         }
@@ -236,6 +264,9 @@ namespace TSStickyWindow
         private double lastLeft;
         private double lastTop;
 
+        /// <summary>
+        /// Call after Location change & Size change
+        /// </summary>
         private void SetLastWindowPosition()
         {
             lastLeft = window.Left;

@@ -223,79 +223,79 @@ namespace TSStickyWindow
             windows.Remove(window);
         }
 
-        internal void ResizeStickedWindowsWidth(StickyWindow source, double deltaWidth)
-        {
-            var hasNewWindow = true;
-            var allWindows = new List<StickyWindow> { source };
-            var newWindows = new List<StickyWindow>();
+        //internal void ResizeStickedWindowsWidth(StickyWindow source, double deltaWidth)
+        //{
+        //    var hasNewWindow = true;
+        //    var allWindows = new List<StickyWindow> { source };
+        //    var newWindows = new List<StickyWindow>();
 
-            while (hasNewWindow)
-            {
-                foreach (var stickyWindow in allWindows)
-                {
-                    var stickedWindows = stickyWindow.GetVerticalStickedWindows(allWindows/*, newWindows*/);
-                    foreach (var stickedWindow in stickedWindows)
-                    {
-                        if (!allWindows.Contains(stickedWindow))
-                            newWindows.Add(stickedWindow);
-                    }
-                }
+        //    while (hasNewWindow)
+        //    {
+        //        foreach (var stickyWindow in allWindows)
+        //        {
+        //            var stickedWindows = stickyWindow.GetVerticalStickedWindows(allWindows/*, newWindows*/);
+        //            foreach (var stickedWindow in stickedWindows)
+        //            {
+        //                if (!allWindows.Contains(stickedWindow))
+        //                    newWindows.Add(stickedWindow);
+        //            }
+        //        }
 
-                // Assuming there are only new windows available here at this point
-                allWindows.AddRange(newWindows);
+        //        // Assuming there are only new windows available here at this point
+        //        allWindows.AddRange(newWindows);
 
-                if (newWindows.Count == 0)
-                    hasNewWindow = false;
+        //        if (newWindows.Count == 0)
+        //            hasNewWindow = false;
 
-                newWindows.Clear();
-            }
+        //        newWindows.Clear();
+        //    }
 
-            // Remove the source (already moved) window
-            allWindows.Remove(source);
+        //    // Remove the source (already moved) window
+        //    allWindows.Remove(source);
 
-            // And reposition the rest
-            foreach (var stickyWindow in allWindows)
-            {
-                stickyWindow.SetWindowWidthDiff(deltaWidth);
-            }
-        }
+        //    // And reposition the rest
+        //    foreach (var stickyWindow in allWindows)
+        //    {
+        //        stickyWindow.SetWindowWidthDiff(deltaWidth);
+        //    }
+        //}
 
-        internal void ResizeStickedWindowsHeight(StickyWindow source, double deltaHeight)
-        {
-            var hasNewWindow = true;
-            var allWindows = new List<StickyWindow> { source };
-            var newWindows = new List<StickyWindow>();
+        //internal void ResizeStickedWindowsHeight(StickyWindow source, double deltaHeight)
+        //{
+        //    var hasNewWindow = true;
+        //    var allWindows = new List<StickyWindow> { source };
+        //    var newWindows = new List<StickyWindow>();
 
-            while (hasNewWindow)
-            {
-                foreach (var stickyWindow in allWindows)
-                {
-                    var stickedWindows = stickyWindow.GetHorizontalStickedWindows(allWindows/*, newWindows*/);
-                    foreach (var stickedWindow in stickedWindows)
-                    {
-                        if (!allWindows.Contains(stickedWindow))
-                            newWindows.Add(stickedWindow);
-                    }
-                }
+        //    while (hasNewWindow)
+        //    {
+        //        foreach (var stickyWindow in allWindows)
+        //        {
+        //            var stickedWindows = stickyWindow.GetHorizontalStickedWindows(allWindows/*, newWindows*/);
+        //            foreach (var stickedWindow in stickedWindows)
+        //            {
+        //                if (!allWindows.Contains(stickedWindow))
+        //                    newWindows.Add(stickedWindow);
+        //            }
+        //        }
 
-                // Assuming there are only new windows available here at this point
-                allWindows.AddRange(newWindows);
+        //        // Assuming there are only new windows available here at this point
+        //        allWindows.AddRange(newWindows);
 
-                if (newWindows.Count == 0)
-                    hasNewWindow = false;
+        //        if (newWindows.Count == 0)
+        //            hasNewWindow = false;
 
-                newWindows.Clear();
-            }
+        //        newWindows.Clear();
+        //    }
 
-            // Remove the source (already moved) window
-            allWindows.Remove(source);
+        //    // Remove the source (already moved) window
+        //    allWindows.Remove(source);
 
-            // And reposition the rest
-            foreach (var stickyWindow in allWindows)
-            {
-                stickyWindow.SetWindowHeightDiff(deltaHeight);
-            }
-        }
+        //    // And reposition the rest
+        //    foreach (var stickyWindow in allWindows)
+        //    {
+        //        stickyWindow.SetWindowHeightDiff(deltaHeight);
+        //    }
+        //}
 
         private void CloseAllWindows()
         {
