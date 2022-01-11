@@ -26,8 +26,6 @@ namespace TSStickyWindow.UISample
                 WindowUnsticked = WindowUnsticked,
             };
 
-            StickyWindowService.Instance.AddNewWindow(this);
-
             LoadSavedLayout();
         }
 
