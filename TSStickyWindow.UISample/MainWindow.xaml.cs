@@ -71,9 +71,15 @@ namespace TSStickyWindow.UISample
             }
 
             if (string.IsNullOrWhiteSpace(savedLayout))
+            {
                 BtnLoadLayout.Visibility = Visibility.Collapsed;
+                BtnCopyLayout.Visibility = Visibility.Collapsed;
+            }
             else
+            {
                 BtnLoadLayout.Visibility = Visibility.Visible;
+                BtnCopyLayout.Visibility = Visibility.Visible;
+            }
         }
 
         private void BtnLoadLayout_OnClick(object sender, RoutedEventArgs e)
@@ -95,6 +101,12 @@ namespace TSStickyWindow.UISample
 
         }
 
+        private void BtnCopyLayout_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (!string.IsNullOrWhiteSpace(savedLayout))
+                Clipboard.SetText(savedLayout);
+        }
+
         private void BtnSaveLayout_OnClick(object sender, RoutedEventArgs e)
         {
             try
@@ -103,6 +115,7 @@ namespace TSStickyWindow.UISample
                 File.WriteAllText("tsstickywindowlayouts.txt", json);
 
                 BtnLoadLayout.Visibility = Visibility.Visible;
+                BtnCopyLayout.Visibility = Visibility.Visible;
             }
             catch (Exception ex)
             {
