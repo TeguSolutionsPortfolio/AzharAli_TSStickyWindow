@@ -365,7 +365,7 @@ namespace TSStickyWindow
 
                 if (arrange)
                 {
-                    window.Left = targetWindow.Left;
+                    //window.Left = targetWindow.Left;
                     window.Top = targetWindow.Bottom;
                 }
             }
@@ -377,7 +377,7 @@ namespace TSStickyWindow
                 if (arrange)
                 {
                     window.Left = targetWindow.Left - window.Width;
-                    window.Top = targetWindow.Top;
+                    //window.Top = targetWindow.Top;
                 }
             }
 
@@ -387,7 +387,7 @@ namespace TSStickyWindow
 
                 if (arrange)
                 {
-                    window.Left = targetWindow.Left;
+                    //window.Left = targetWindow.Left;
                     window.Top = targetWindow.Top - window.Height;
                 }
             }
@@ -398,8 +398,9 @@ namespace TSStickyWindow
 
                 if (arrange)
                 {
-                    window.Left = targetWindow.Left + targetWindow.window.Width;
-                    window.Top = targetWindow.Top;
+                    //window.Left = targetWindow.Left + targetWindow.window.Width;
+                    window.Left = targetWindow.Right;
+                    //window.Top = targetWindow.Top;
                 }
             }
 
