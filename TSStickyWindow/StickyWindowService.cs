@@ -138,9 +138,53 @@ namespace TSStickyWindow
 
         #region Internal Functions
 
+        //private List<StickyWindow> magnetWindows = new();
+
         internal void TryMagnetWithUnstickedWindows(StickyWindow source)
         {
+            //magnetWindows.Clear();
 
+            foreach (var target in windows)
+            {
+                if (target.Id == source.Id ||
+                    target.Id == source.Stick[StickPosition.Top]?.Id ||
+                    target.Id == source.Stick[StickPosition.Right]?.Id ||
+                    target.Id == source.Stick[StickPosition.Bottom]?.Id ||
+                    target.Id == source.Stick[StickPosition.Left]?.Id)
+                    continue;
+
+                // Source Top Edge
+                if (Math.Abs(target.Bottom - source.Top) < options.SnapOffset &&
+                    target.Left <= source.Right &&
+                    target.Right >= source.Left)
+                {
+                    source.SetMagnetPosition(target.Bottom, null, null, null);
+                }
+
+                // Source Right Edge
+                else if (Math.Abs(target.Left - source.Right) < options.SnapOffset &&
+                         target.Top <= source.Bottom &&
+                         target.Bottom >= source.Top)
+                {
+                    source.SetMagnetPosition(null, target.Left, null, null);
+                }
+
+                // Source Bottom Edge
+                if (Math.Abs(target.Top - source.Bottom) < options.SnapOffset &&
+                    target.Left <= source.Right &&
+                    target.Right >= source.Left)
+                {
+                    source.SetMagnetPosition(null, null, target.Top, null);
+                }
+
+                // Source Left Edge
+                else if (Math.Abs(target.Right - source.Left) < options.SnapOffset &&
+                         target.Top <= source.Bottom &&
+                         target.Bottom >= source.Top)
+                {
+                    source.SetMagnetPosition(null, null, null, target.Right);
+                }
+            }
         }
 
         internal void TryStickWithOtherWindows(StickyWindow source)

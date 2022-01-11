@@ -209,6 +209,7 @@ namespace TSStickyWindow
                 //SetLastWindowPosition();
             }
 
+            service.TryMagnetWithUnstickedWindows(this);
             SetLastWindowPosition();
         }
 
@@ -495,6 +496,22 @@ namespace TSStickyWindow
                 newWindows.Add(Stick[StickPosition.Bottom]);
 
             return newWindows;
+        }
+
+        #endregion
+
+        #region Magnet
+
+        internal void SetMagnetPosition(double? top, double? right, double? bottom, double? left)
+        {
+            if (top is not null)
+                window.Top = top.Value;
+            else if (right is not null)
+                window.Left = right.Value - Width;
+            else if (bottom is not null)
+                window.Top = bottom.Value - Height;
+            else if (left is not null)
+                window.Left = left.Value;
         }
 
         #endregion
