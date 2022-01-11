@@ -72,13 +72,13 @@ namespace TSStickyWindow
                 };
 
                 if (window.Stick[StickPosition.Top] is not null)
-                    layoutWindow.ConnectionTopId = window.Stick[StickPosition.Top].Id;
+                    layoutWindow.ConnectionTopId = window.Stick[StickPosition.Top]!.Id;
                 if (window.Stick[StickPosition.Right] is not null)
-                    layoutWindow.ConnectionRightId = window.Stick[StickPosition.Right].Id;
+                    layoutWindow.ConnectionRightId = window.Stick[StickPosition.Right]!.Id;
                 if (window.Stick[StickPosition.Bottom] is not null)
-                    layoutWindow.ConnectionBottomId = window.Stick[StickPosition.Bottom].Id;
+                    layoutWindow.ConnectionBottomId = window.Stick[StickPosition.Bottom]!.Id;
                 if (window.Stick[StickPosition.Left] is not null)
-                    layoutWindow.ConnectionLeftId = window.Stick[StickPosition.Left].Id;
+                    layoutWindow.ConnectionLeftId = window.Stick[StickPosition.Left]!.Id;
 
                 layout.Windows.Add(layoutWindow);
             }
@@ -208,21 +208,8 @@ namespace TSStickyWindow
             string targetTopId = "", string targetRightId = "",
             string targetBottomId = "", string targetLeftId = "")
         {
-
+            WindowUnsticked?.Invoke(new WindowUnstickedMessage(sourceId, targetTopId, targetRightId, targetBottomId, targetLeftId));
         }
-        //internal void TryUnstickWithOtherWindows(StickyWindow source)
-        //{
-        //    foreach (var target in windows)
-        //    {
-        //        if (target == source)
-        //            continue;
-
-        //        source.UnstickWindow(target);
-        //        target.UnstickWindow(source);
-        //    }
-
-        //    WindowUnsticked?.Invoke(new WindowUnstickedMessage());
-        //}
 
         internal void RemoveWindow(StickyWindow window)
         {

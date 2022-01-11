@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -408,21 +407,13 @@ namespace TSStickyWindow
             HighlightStickState();
         }
 
+        /// <summary>
+        /// Called from the Source window, to unstick it from the target, based on the relative Position
+        /// </summary>
+        /// <param name="position"></param>
         internal void UnstickWindow(StickPosition position)
         {
-            //var stick = Stick.FirstOrDefault(s => s.Value == targetWindow);
-            //Stick[stick.Key] = null;
             Stick[position] = null;
-                
-
-            //if (StickTop == targetWindow)
-            //    StickTop = null;
-            //else if (StickRight == targetWindow)
-            //    StickRight = null;
-            //else if (StickBottom == targetWindow)
-            //    StickBottom = null;
-            //else if (StickLeft == targetWindow)
-            //    StickLeft = null;
 
             HighlightStickState();
         }
@@ -465,7 +456,6 @@ namespace TSStickyWindow
         private void StartUnstickWindows(object sender, RoutedEventArgs e)
         {
             UnsticFromAllWindows();
-            //service.TryUnstickWithOtherWindows(this);
         }
 
         internal List<StickyWindow> GetAllStickedWindows(List<StickyWindow> existingWindows)
