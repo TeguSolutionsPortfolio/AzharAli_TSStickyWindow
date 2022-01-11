@@ -301,7 +301,8 @@ namespace TSStickyWindow
 
         private void WindowOnClosing(object sender, CancelEventArgs e)
         {
-            service.TryUnstickWithOtherWindows(this);
+            //service.TryUnstickWithOtherWindows(this);
+            UnsticFromAllWindows();
             service.RemoveWindow(this);
 
             // Cleanup the events
@@ -407,11 +408,11 @@ namespace TSStickyWindow
             HighlightStickState();
         }
 
-        internal void UnstickWindow(StickyWindow targetWindow)
+        internal void UnstickWindow(StickPosition position)
         {
-            var stick = Stick.FirstOrDefault(s => s.Value == targetWindow);
-            Stick[stick.Key] = null;
-
+            //var stick = Stick.FirstOrDefault(s => s.Value == targetWindow);
+            //Stick[stick.Key] = null;
+            Stick[position] = null;
                 
 
             //if (StickTop == targetWindow)
@@ -422,6 +423,27 @@ namespace TSStickyWindow
             //    StickBottom = null;
             //else if (StickLeft == targetWindow)
             //    StickLeft = null;
+
+            HighlightStickState();
+        }
+        internal void UnsticFromAllWindows()
+        {
+            Stick[StickPosition.Top]?.UnstickWindow(StickPosition.Bottom);
+            Stick[StickPosition.Right]?.UnstickWindow(StickPosition.Left);
+            Stick[StickPosition.Bottom]?.UnstickWindow(StickPosition.Top);
+            Stick[StickPosition.Left]?.UnstickWindow(StickPosition.Right);
+
+            service.InvokeWindowsUnsticked(Id, 
+                Stick[StickPosition.Top]?.Id ?? "", 
+                Stick[StickPosition.Right]?.Id ?? "",
+                Stick[StickPosition.Bottom]?.Id ?? "", 
+                Stick[StickPosition.Left]?.Id ?? ""
+            );
+
+            Stick[StickPosition.Top] = null;
+            Stick[StickPosition.Right] = null;
+            Stick[StickPosition.Bottom] = null;
+            Stick[StickPosition.Left] = null;
 
             HighlightStickState();
         }
@@ -442,7 +464,8 @@ namespace TSStickyWindow
 
         private void StartUnstickWindows(object sender, RoutedEventArgs e)
         {
-            service.TryUnstickWithOtherWindows(this);
+            UnsticFromAllWindows();
+            //service.TryUnstickWithOtherWindows(this);
         }
 
         internal List<StickyWindow> GetAllStickedWindows(List<StickyWindow> existingWindows)

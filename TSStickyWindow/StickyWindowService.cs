@@ -204,19 +204,25 @@ namespace TSStickyWindow
 
         }
 
-        internal void TryUnstickWithOtherWindows(StickyWindow source)
+        internal void InvokeWindowsUnsticked(string sourceId,
+            string targetTopId = "", string targetRightId = "",
+            string targetBottomId = "", string targetLeftId = "")
         {
-            foreach (var target in windows)
-            {
-                if (target == source)
-                    continue;
 
-                source.UnstickWindow(target);
-                target.UnstickWindow(source);
-            }
-
-            WindowUnsticked?.Invoke(new WindowUnstickedMessage());
         }
+        //internal void TryUnstickWithOtherWindows(StickyWindow source)
+        //{
+        //    foreach (var target in windows)
+        //    {
+        //        if (target == source)
+        //            continue;
+
+        //        source.UnstickWindow(target);
+        //        target.UnstickWindow(source);
+        //    }
+
+        //    WindowUnsticked?.Invoke(new WindowUnstickedMessage());
+        //}
 
         internal void RemoveWindow(StickyWindow window)
         {
