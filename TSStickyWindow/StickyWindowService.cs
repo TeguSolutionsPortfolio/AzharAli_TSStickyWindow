@@ -138,12 +138,8 @@ namespace TSStickyWindow
 
         #region Internal Functions
 
-        //private List<StickyWindow> magnetWindows = new();
-
-        internal void TryMagnetWithUnstickedWindows(StickyWindow source)
+        internal (MagnetOrientiation orientiation, string? targetId) TryMagnetWithUnstickedWindows(StickyWindow source)
         {
-            //magnetWindows.Clear();
-
             foreach (var target in windows)
             {
                 if (target.Id == source.Id ||
@@ -159,6 +155,7 @@ namespace TSStickyWindow
                     target.Right >= source.Left)
                 {
                     source.SetMagnetPosition(target.Bottom, null, null, null);
+                    return (MagnetOrientiation.Vertical, target.Id);
                 }
 
                 // Source Right Edge
@@ -167,6 +164,7 @@ namespace TSStickyWindow
                          target.Bottom >= source.Top)
                 {
                     source.SetMagnetPosition(null, target.Left, null, null);
+                    return (MagnetOrientiation.Horizontal, target.Id);
                 }
 
                 // Source Bottom Edge
@@ -175,6 +173,7 @@ namespace TSStickyWindow
                     target.Right >= source.Left)
                 {
                     source.SetMagnetPosition(null, null, target.Top, null);
+                    return (MagnetOrientiation.Vertical, target.Id);
                 }
 
                 // Source Left Edge
@@ -183,8 +182,11 @@ namespace TSStickyWindow
                          target.Bottom >= source.Top)
                 {
                     source.SetMagnetPosition(null, null, null, target.Right);
+                    return (MagnetOrientiation.Horizontal, target.Id);
                 }
             }
+
+            return (MagnetOrientiation.None, null);
         }
 
         internal void TryStickWithOtherWindows(StickyWindow source)

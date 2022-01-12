@@ -190,14 +190,26 @@ namespace TSStickyWindow
             isSticking = false;
         }
 
+        //private string? lastTargetMagnetWindowId = null;
+
         private void WindowOnLocationChanged(object? sender, EventArgs e)
         {
             testControls.UpdatePositionLabels();
+
+            if (window.IsActive)
+                service.TryMagnetWithUnstickedWindows(this);
 
             if (!isSticking && window.IsActive)
             {
                 var deltaX = window.Left - lastLeft;
                 var deltaY = window.Top - lastTop;
+
+                //if (lastTargetMagnetWindowId != magnetResult.targetId && magnetResult.orientiation == MagnetOrientiation.Vertical)
+                //    deltaY = 0;
+                //else if (lastTargetMagnetWindowId != magnetResult.targetId && magnetResult.orientiation == MagnetOrientiation.Horizontal)
+                //    deltaX = 0;
+
+                //lastTargetMagnetWindowId = magnetResult.targetId;
 
                 var handledIds = new List<string> { Id };
                 foreach (var (_, stickyWindow) in Stick)
@@ -209,7 +221,7 @@ namespace TSStickyWindow
                 //SetLastWindowPosition();
             }
 
-            service.TryMagnetWithUnstickedWindows(this);
+
             SetLastWindowPosition();
         }
 
