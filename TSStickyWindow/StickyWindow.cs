@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -223,7 +224,6 @@ namespace TSStickyWindow
                 //SetLastWindowPosition();
             }
 
-
             SetLastWindowPosition();
         }
 
@@ -315,7 +315,6 @@ namespace TSStickyWindow
 
         private void WindowOnClosing(object sender, CancelEventArgs e)
         {
-            //service.TryUnstickWithOtherWindows(this);
             UnsticFromAllWindows();
             service.RemoveWindow(this);
 
@@ -374,49 +373,19 @@ namespace TSStickyWindow
         {
             Stick[position] = targetWindow;
 
-            if (position == StickPosition.Top)
+            if (arrange)
             {
-                //StickTop = targetWindow;
-
-                if (arrange)
-                {
-                    //window.Left = targetWindow.Left;
+                if (position == StickPosition.Top)
                     window.Top = targetWindow.Bottom;
-                }
-            }
-
-            else if (position == StickPosition.Right)
-            {
-                //StickRight = targetWindow;
-
-                if (arrange)
-                {
+                
+                else if (position == StickPosition.Right)
                     window.Left = targetWindow.Left - window.Width;
-                    //window.Top = targetWindow.Top;
-                }
-            }
-
-            else if (position == StickPosition.Bottom)
-            {
-                //StickBottom = targetWindow;
-
-                if (arrange)
-                {
-                    //window.Left = targetWindow.Left;
+                
+                else if (position == StickPosition.Bottom)
                     window.Top = targetWindow.Top - window.Height;
-                }
-            }
-
-            else if (position == StickPosition.Left)
-            {
-                //StickLeft = targetWindow;
-
-                if (arrange)
-                {
-                    //window.Left = targetWindow.Left + targetWindow.window.Width;
+                
+                else if (position == StickPosition.Left)
                     window.Left = targetWindow.Right;
-                    //window.Top = targetWindow.Top;
-                }
             }
 
             HighlightStickState();
@@ -458,13 +427,7 @@ namespace TSStickyWindow
         {
             testControls?.HighlightStickState();
 
-            if (Stick[StickPosition.Top] is not null ||
-                Stick[StickPosition.Right] is not null ||
-                Stick[StickPosition.Bottom] is not null ||
-                Stick[StickPosition.Left] is not null)
-                btnUnstick.Visibility = Visibility.Visible;
-            else
-                btnUnstick.Visibility = Visibility.Collapsed;
+            btnUnstick.Visibility = Stick.Values.Any(s => s != null) ? Visibility.Visible : Visibility.Collapsed;
         }
 
         private void StartUnstickWindows(object sender, RoutedEventArgs e)

@@ -134,8 +134,8 @@ namespace TSStickyWindow.UISample
 
         private Window GetWindowByName(string type)
         {
-            if (type == nameof(MainWindow))
-                return this;
+            //if (type == nameof(MainWindow))
+            //    return this;
             if (type == nameof(SubWindow))
                 return new SubWindow();
 
