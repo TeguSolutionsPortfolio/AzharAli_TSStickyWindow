@@ -33,7 +33,13 @@ namespace TSStickyWindow
         /// </summary>
         public int SnapOffset { get; } = 10;
 
+        /// <summary>
+        /// Minimal width of the window for resize, has to be bigger or equal than 0!
+        /// </summary>
         public double WindowMinWidth { get; } = 50;
+        /// <summary>
+        /// Minimal height of the window for resize, has to be bigger or equal than 0!
+        /// </summary>
         public double WindowMinHeight { get; } = 50;
 
         public double WindowInitialWidth { get; } = 150;

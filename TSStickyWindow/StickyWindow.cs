@@ -71,7 +71,7 @@ namespace TSStickyWindow
         }
         internal void SetWindowWidth(double width)
         {
-            if (width < options.WindowMinWidth && width >= 0)
+            if (width < options.WindowMinWidth/* && width >= 0*/)
                 window.Width = options.WindowMinWidth;
             else
                 window.Width = width;
@@ -93,7 +93,7 @@ namespace TSStickyWindow
         }
         internal void SetWindowHeight(double height)
         {
-            if (height < options.WindowMinHeight && height >= 0)
+            if (height < options.WindowMinHeight /*&& height >= 0*/)
                 window.Height = options.WindowMinHeight;
             else
                 window.Height = height;
@@ -185,7 +185,7 @@ namespace TSStickyWindow
             if (e.LeftButton == MouseButtonState.Released)
                 return;
 
-            SetLastWindowPosition();
+            SetLastWindowPosition(true);
 
             //Window.OnMouseLeftButtonDown(e);
             window.DragMove();
@@ -197,6 +197,11 @@ namespace TSStickyWindow
 
         private void WindowOnLocationChanged(object sender, EventArgs e)
         {
+            // Filter out the accidental changes caused by Size change!!!
+            if (Math.Abs(lastWidthAfterLocationChange - window.Width) > 0.01 ||
+                Math.Abs(lastHeightAfterLocationChange - window.Height) > 0.01)
+                return;
+
             testControls?.UpdatePositionLabels();
 
             if (window.IsActive)
@@ -214,14 +219,14 @@ namespace TSStickyWindow
                 }
             }
 
-            SetLastWindowPosition();
+            SetLastWindowPosition(true);
         }
 
         private void WindowOnSizeChanged(object sender, SizeChangedEventArgs e)
         {
             if (!window.IsActive)
             {
-                SetLastWindowPosition();
+                SetLastWindowPosition(false);
                 return;
             }
 
@@ -265,14 +270,16 @@ namespace TSStickyWindow
             }
             else if (e.WidthChanged)
             {
+
                 if (e.NewSize.Width <= options.WindowMinWidth)
                 {
                     window.Width = options.WindowMinWidth;
-                    return;
+                    //return;
                 }
 
                 // Resized from the Left
-                if (window.Left != lastLeft)
+                //if (window.Left != lastLeft)
+                if (Math.Abs(window.Left - lastLeft) > 0.1)
                 {
                     // Resize the vertical windows
                     if (Stick[StickPosition.Top] is not null)
@@ -282,7 +289,7 @@ namespace TSStickyWindow
 
                     // Move the left windows
                     if (Stick[StickPosition.Left] is not null)
-                        Stick[StickPosition.Left]!.SetWindowPositionDiff(handledPositionIds, Left - lastLeft, 0);
+                        Stick[StickPosition.Left].SetWindowPositionDiff(handledPositionIds, Left - lastLeft, 0);
                 }
                 // Resized from the Right
                 else
@@ -295,12 +302,12 @@ namespace TSStickyWindow
 
                     // Move the right windows
                     if (Stick[StickPosition.Right] is not null)
-                        Stick[StickPosition.Right]!.SetWindowPositionDiff(handledPositionIds, Right - lastRight, 0);
+                        Stick[StickPosition.Right].SetWindowPositionDiff(handledPositionIds, Right - lastRight, 0);
                 }
             }
 
-            SetLastWindowPosition();
-            testControls.UpdatePositionLabels();
+            SetLastWindowPosition(false);
+            testControls?.UpdatePositionLabels();
         }
 
         private void WindowOnClosing(object sender, CancelEventArgs e)
@@ -318,6 +325,9 @@ namespace TSStickyWindow
 
         #region Window Position
 
+        private double lastWidthAfterLocationChange;
+        private double lastHeightAfterLocationChange;
+
         private double lastLeft;
         private double lastTop;
         private double lastRight;
@@ -326,8 +336,14 @@ namespace TSStickyWindow
         /// <summary>
         /// Call after Location change & Size change
         /// </summary>
-        private void SetLastWindowPosition()
+        private void SetLastWindowPosition(bool fromLocation)
         {
+            if (fromLocation)
+            {
+                lastWidthAfterLocationChange = window.Width;
+                lastHeightAfterLocationChange = window.Height;
+            }
+
             lastLeft = window.Left;
             lastTop = window.Top;
             lastRight = window.Left + window.Width;
