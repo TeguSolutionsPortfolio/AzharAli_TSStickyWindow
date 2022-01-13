@@ -15,13 +15,17 @@ namespace TSStickyWindow
     /// </summary>
     public class StickyWindowService
     {
+        private readonly bool testMode;
         private readonly StickyWindowOptions options;
         private readonly List<StickyWindow> windows;
 
-        #region Init
+        #region Constructor & Initialization
 
-        public StickyWindowService(StickyWindowOptions options = null)
+        public StickyWindowService(StickyWindowOptions options = null, bool? testmode = null)
         {
+            if (testmode == true)
+                testMode = true;
+
             this.options = options ?? new StickyWindowOptions();
 
             windows = new List<StickyWindow>();
@@ -34,26 +38,14 @@ namespace TSStickyWindow
         /// </summary>
         public static StickyWindowService Instance { get; set; }
 
-        #region Id Service
-
-        private int biggestGivenId;
-
-        internal string GetNextId()
-        {
-            biggestGivenId++;
-            return biggestGivenId.ToString();
-        }
-
-        #endregion
-
         #region Public Functions
 
-        public void AddNewWindow(Window window)
+        public void AddNewWindow(Window window, string id)
         {
             window.Width = options.WindowInitialWidth;
             window.Height = options.WindowInitialHeight;
 
-            windows.Add(new StickyWindow(this, options, window));
+            windows.Add(new StickyWindow(this, options, window, id, testMode));
         }
 
         public string GetLayout()
@@ -99,10 +91,7 @@ namespace TSStickyWindow
                 layoutWindow.Window.Width = layoutWindow.Width;
                 layoutWindow.Window.Height = layoutWindow.Height;
 
-                var stickyWindow = new StickyWindow(this, options, layoutWindow.Window)
-                {
-                    Id = layoutWindow.Id
-                };
+                var stickyWindow = new StickyWindow(this, options, layoutWindow.Window, layoutWindow.Id);
 
                 windows.Add(stickyWindow);
                 stickyWindow.ShowWindow();

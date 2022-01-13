@@ -26,11 +26,16 @@ namespace TSStickyWindow
 
         public StickyWindow(StickyWindowService stickyService,
             StickyWindowOptions stickyOptions,
-            Window window)
+            Window window,
+            string id,
+            bool? testMode = null)
         {
+            Id = id;
             service = stickyService;
             options = stickyOptions;
-            testControls = new StickyWindowTestControls(this, window);
+
+            if (testMode == true)
+                testControls = new StickyWindowTestControls(this, window);
 
             this.window = window;
 
@@ -40,8 +45,7 @@ namespace TSStickyWindow
 
             SetWindowControls();
 
-            Id = service.GetNextId();
-            lblTitle!.Content = Id;
+            lblTitle.Content = Id;
 
             Stick = new Dictionary<StickPosition, StickyWindow>
             {
@@ -192,7 +196,7 @@ namespace TSStickyWindow
 
         private void WindowOnLocationChanged(object sender, EventArgs e)
         {
-            testControls.UpdatePositionLabels();
+            testControls?.UpdatePositionLabels();
 
             if (window.IsActive)
                 service.TryMagnetWithUnstickedWindows(this);
@@ -452,8 +456,7 @@ namespace TSStickyWindow
 
         private void HighlightStickState()
         {
-            testControls.HighlightStickState();
-
+            testControls?.HighlightStickState();
 
             if (Stick[StickPosition.Top] is not null ||
                 Stick[StickPosition.Right] is not null ||

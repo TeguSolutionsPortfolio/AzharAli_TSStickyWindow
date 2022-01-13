@@ -20,7 +20,12 @@ namespace TSStickyWindow.UISample
             InitializeComponent();
 
             // Todo: initialize the Sticky Window Service with options (optional)
-            StickyWindowService.Instance = new StickyWindowService(new StickyWindowOptions(10, 50, 50) { MainWindowType = typeof(MainWindow) })
+            StickyWindowService.Instance = new StickyWindowService(
+                new StickyWindowOptions(10, 50, 50)
+                {
+                    MainWindowType = typeof(MainWindow)
+                },
+                testmode: true)
             {
                 WindowSticked = WindowSticked,
                 WindowUnsticked = WindowUnsticked,
@@ -51,7 +56,7 @@ namespace TSStickyWindow.UISample
 
         private void Btn_NewWindow_Click(object sender, RoutedEventArgs e)
         {
-            StickyWindowService.Instance.AddNewWindow(new SubWindow());
+            StickyWindowService.Instance.AddNewWindow(new SubWindow(), GetNextId());
         }
 
 
@@ -139,5 +144,16 @@ namespace TSStickyWindow.UISample
 
         #endregion
 
+        #region Helper - Id Service
+
+        private int biggestGivenId;
+
+        internal string GetNextId()
+        {
+            biggestGivenId++;
+            return biggestGivenId.ToString();
+        }
+
+        #endregion
     }
 }
