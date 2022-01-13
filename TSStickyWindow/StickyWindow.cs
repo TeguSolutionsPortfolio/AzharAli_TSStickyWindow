@@ -43,7 +43,7 @@ namespace TSStickyWindow
             Id = service.GetNextId();
             lblTitle!.Content = Id;
 
-            Stick = new Dictionary<StickPosition, StickyWindow?>
+            Stick = new Dictionary<StickPosition, StickyWindow>
             {
                 [StickPosition.Top] = null,
                 [StickPosition.Right] = null,
@@ -190,9 +190,7 @@ namespace TSStickyWindow
             isSticking = false;
         }
 
-        //private string? lastTargetMagnetWindowId = null;
-
-        private void WindowOnLocationChanged(object? sender, EventArgs e)
+        private void WindowOnLocationChanged(object sender, EventArgs e)
         {
             testControls.UpdatePositionLabels();
 
@@ -355,7 +353,7 @@ namespace TSStickyWindow
 
         #region Sticked Windows Management
 
-        internal Dictionary<StickPosition, StickyWindow?> Stick { get; set; }
+        internal Dictionary<StickPosition, StickyWindow> Stick { get; set; }
 
         internal bool CanStickWindow(StickyWindow source, StickPosition position)
         {

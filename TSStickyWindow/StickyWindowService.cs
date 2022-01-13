@@ -20,7 +20,7 @@ namespace TSStickyWindow
 
         #region Init
 
-        public StickyWindowService(StickyWindowOptions? options = null)
+        public StickyWindowService(StickyWindowOptions options = null)
         {
             this.options = options ?? new StickyWindowOptions();
 
@@ -131,128 +131,83 @@ namespace TSStickyWindow
 
         #region Public Events
 
-        public Action<WindowStickedMessage>? WindowSticked { get; set; }
-        public Action<WindowUnstickedMessage>? WindowUnsticked { get; set; }
+        public Action<WindowStickedMessage> WindowSticked { get; set; }
+        public Action<WindowUnstickedMessage> WindowUnsticked { get; set; }
 
         #endregion
 
         #region Internal Functions
 
-        internal (MagnetOrientiation orientiation, string? targetId) TryMagnetWithUnstickedWindows(StickyWindow source)
+        internal (MagnetOrientiation orientiation, string targetId) TryMagnetWithUnstickedWindows(StickyWindow source)
         {
-            foreach (var target in windows)
-            {
-                if (target.Id == source.Id ||
-                    target.Id == source.Stick[StickPosition.Top]?.Id ||
-                    target.Id == source.Stick[StickPosition.Right]?.Id ||
-                    target.Id == source.Stick[StickPosition.Bottom]?.Id ||
-                    target.Id == source.Stick[StickPosition.Left]?.Id)
-                    continue;
+            var (targetPosition, target) = GetTargetPosition(source);
 
-                // Source Top Edge
-                if (Math.Abs(target.Bottom - source.Top) < options.SnapOffset &&
-                    target.Left <= source.Right &&
-                    target.Right >= source.Left)
-                {
+            switch (targetPosition)
+            {
+                case StickPosition.Top:
                     source.SetMagnetPosition(target.Bottom, null, null, null);
                     return (MagnetOrientiation.Vertical, target.Id);
-                }
-
-                // Source Right Edge
-                else if (Math.Abs(target.Left - source.Right) < options.SnapOffset &&
-                         target.Top <= source.Bottom &&
-                         target.Bottom >= source.Top)
-                {
+                case StickPosition.Right:
                     source.SetMagnetPosition(null, target.Left, null, null);
                     return (MagnetOrientiation.Horizontal, target.Id);
-                }
-
-                // Source Bottom Edge
-                if (Math.Abs(target.Top - source.Bottom) < options.SnapOffset &&
-                    target.Left <= source.Right &&
-                    target.Right >= source.Left)
-                {
+                case StickPosition.Bottom:
                     source.SetMagnetPosition(null, null, target.Top, null);
                     return (MagnetOrientiation.Vertical, target.Id);
-                }
-
-                // Source Left Edge
-                else if (Math.Abs(target.Right - source.Left) < options.SnapOffset &&
-                         target.Top <= source.Bottom &&
-                         target.Bottom >= source.Top)
-                {
+                case StickPosition.Left:
                     source.SetMagnetPosition(null, null, null, target.Right);
                     return (MagnetOrientiation.Horizontal, target.Id);
-                }
+                default:
+                    return (MagnetOrientiation.None, null);
             }
-
-            return (MagnetOrientiation.None, null);
         }
 
         internal void TryStickWithOtherWindows(StickyWindow source)
         {
-            foreach (var target in windows)
+            var (targetPosition, target) = GetTargetPosition(source);
+
+            if (targetPosition == StickPosition.Top)
             {
-                if (target == source)
-                    continue;
+                if (!source.CanStickWindow(target, StickPosition.Top) ||
+                    !target.CanStickWindow(source, StickPosition.Bottom)) 
+                    return;
 
-                // Source Top Edge
-                if (Math.Abs(target.Bottom - source.Top) < options.SnapOffset &&
-                    target.Left <= source.Right &&
-                    target.Right >= source.Left)
-                {
-                    if (source.CanStickWindow(target, StickPosition.Top) && target.CanStickWindow(source, StickPosition.Bottom))
-                    {
-                        source.StickWindow(target, StickPosition.Top, true);
-                        target.StickWindow(source, StickPosition.Bottom);
-
-                        WindowSticked?.Invoke(new WindowStickedMessage());
-                    }
-                }
-
-                // Source Right Edge
-                else if (Math.Abs(target.Left - source.Right) < options.SnapOffset &&
-                         target.Top <= source.Bottom &&
-                         target.Bottom >= source.Top)
-                {
-                    if (source.CanStickWindow(target, StickPosition.Right) && target.CanStickWindow(source, StickPosition.Left))
-                    {
-                        source.StickWindow(target, StickPosition.Right, true);
-                        target.StickWindow(source, StickPosition.Left);
-
-                        WindowSticked?.Invoke(new WindowStickedMessage());
-                    }
-                }
-
-                // Source Bottom Edge
-                if (Math.Abs(target.Top - source.Bottom) < options.SnapOffset &&
-                    target.Left <= source.Right &&
-                    target.Right >= source.Left)
-                {
-                    if (source.CanStickWindow(target, StickPosition.Bottom) && target.CanStickWindow(source, StickPosition.Top))
-                    {
-                        source.StickWindow(target, StickPosition.Bottom, true);
-                        target.StickWindow(source, StickPosition.Top);
-
-                        WindowSticked?.Invoke(new WindowStickedMessage());
-                    }
-                }
-
-                // Source Left Edge
-                else if (Math.Abs(target.Right - source.Left) < options.SnapOffset &&
-                         target.Top <= source.Bottom &&
-                         target.Bottom >= source.Top)
-                {
-                    if (source.CanStickWindow(target, StickPosition.Left) && target.CanStickWindow(source, StickPosition.Right))
-                    {
-                        source.StickWindow(target, StickPosition.Left, true);
-                        target.StickWindow(source, StickPosition.Right);
-
-                        WindowSticked?.Invoke(new WindowStickedMessage());
-                    }
-                }
+                source.StickWindow(target, StickPosition.Top, true);
+                target.StickWindow(source, StickPosition.Bottom);
+                WindowSticked?.Invoke(new WindowStickedMessage());
             }
 
+            else if (targetPosition == StickPosition.Right)
+            {
+                if (!source.CanStickWindow(target, StickPosition.Right) ||
+                    !target.CanStickWindow(source, StickPosition.Left)) 
+                    return;
+
+                source.StickWindow(target, StickPosition.Right, true);
+                target.StickWindow(source, StickPosition.Left);
+                WindowSticked?.Invoke(new WindowStickedMessage());
+            }
+
+            else if (targetPosition == StickPosition.Bottom)
+            {
+                if (!source.CanStickWindow(target, StickPosition.Bottom) ||
+                    !target.CanStickWindow(source, StickPosition.Top)) 
+                    return;
+
+                source.StickWindow(target, StickPosition.Bottom, true);
+                target.StickWindow(source, StickPosition.Top);
+                WindowSticked?.Invoke(new WindowStickedMessage());
+            }
+
+            else if (targetPosition == StickPosition.Left)
+            {
+                if (!source.CanStickWindow(target, StickPosition.Left) ||
+                    !target.CanStickWindow(source, StickPosition.Right)) 
+                    return;
+
+                source.StickWindow(target, StickPosition.Left, true);
+                target.StickWindow(source, StickPosition.Right);
+                WindowSticked?.Invoke(new WindowStickedMessage());
+            }
         }
 
         internal void InvokeWindowsUnsticked(string sourceId,
@@ -278,6 +233,57 @@ namespace TSStickyWindow
             {
                 stickyWindow.CloseWindow();
             }
+        }
+
+        #endregion
+
+        #region Helper functions
+
+        private (StickPosition? targetPosition, StickyWindow target) GetTargetPosition(StickyWindow source)
+        {
+            foreach (var target in windows)
+            {
+                if (target.Id == source.Id ||
+                    target.Id == source.Stick[StickPosition.Top]?.Id ||
+                    target.Id == source.Stick[StickPosition.Right]?.Id ||
+                    target.Id == source.Stick[StickPosition.Bottom]?.Id ||
+                    target.Id == source.Stick[StickPosition.Left]?.Id)
+                    continue;
+
+                // Source Top Edge
+                if (Math.Abs(target.Bottom - source.Top) < options.SnapOffset &&
+                    target.Left <= source.Right &&
+                    target.Right >= source.Left)
+                {
+                    return (StickPosition.Top, target);
+                }
+
+                // Source Right Edge
+                if (Math.Abs(target.Left - source.Right) < options.SnapOffset &&
+                    target.Top <= source.Bottom &&
+                    target.Bottom >= source.Top)
+                {
+                    return (StickPosition.Right, target);
+                }
+
+                // Source Bottom Edge
+                if (Math.Abs(target.Top - source.Bottom) < options.SnapOffset &&
+                    target.Left <= source.Right &&
+                    target.Right >= source.Left)
+                {
+                    return (StickPosition.Bottom, target);
+                }
+
+                // Source Left Edge
+                if (Math.Abs(target.Right - source.Left) < options.SnapOffset &&
+                         target.Top <= source.Bottom &&
+                         target.Bottom >= source.Top)
+                {
+                    return (StickPosition.Left, target);
+                }
+            }
+
+            return (null, null);
         }
 
         #endregion
