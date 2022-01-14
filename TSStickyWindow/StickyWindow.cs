@@ -251,7 +251,7 @@ namespace TSStickyWindow
             var handledPositionIds = new List<string> { Id };
 
             // Resized from the Top
-            if (Math.Abs(window.Top - lastTop) > 0.1)
+            if (Math.Abs(window.Top - lastTop) > 0.001)
             {
                 // Resize the horizontal windows
                 handledSizeIds = Stick[StickPosition.Left]?.SetWindowHeightDiff(handledSizeIds, Top - lastTop);
@@ -283,7 +283,7 @@ namespace TSStickyWindow
             var handledPositionIds = new List<string> { Id };
 
             // Resized from the Left
-            if (Math.Abs(window.Left - lastLeft) > 0.1)
+            if (Math.Abs(window.Left - lastLeft) > 0.001)
             {
                 // Resize the vertical windows
                 handledSizeIds = Stick[StickPosition.Top]?.SetWindowWidthDiff(handledSizeIds, Left - lastLeft);
