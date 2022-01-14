@@ -56,6 +56,9 @@ namespace TSStickyWindow
                 [StickPosition.Left] = null
             };
 
+            window.MinWidth = options.WindowMinWidth;
+            window.MinHeight = options.WindowMinHeight;
+
             this.window.Show();
         }
 
@@ -70,6 +73,7 @@ namespace TSStickyWindow
         {
             return window.GetType().Name;
         }
+
         internal void SetWindowWidth(double width)
         {
             if (width < options.WindowMinWidth/* && width >= 0*/)
@@ -77,7 +81,6 @@ namespace TSStickyWindow
             else
                 window.Width = width;
         }
-
         internal List<string> SetWindowWidthDiff(List<string> handledIds, double dWidth)
         {
             if (handledIds.Contains(Id))
@@ -85,14 +88,13 @@ namespace TSStickyWindow
             handledIds.Add(Id);
 
             SetWindowWidth(window.Width + dWidth);
-
-            if (Stick[StickPosition.Left] is not null)
-                handledIds = Stick[StickPosition.Left].SetWindowWidthDiff(handledIds, dWidth);
-            if (Stick[StickPosition.Right] is not null)
-                handledIds = Stick[StickPosition.Right].SetWindowWidthDiff(handledIds, dWidth);
+            
+            handledIds = Stick[StickPosition.Left]?.SetWindowWidthDiff(handledIds, dWidth); 
+            handledIds = Stick[StickPosition.Right]?.SetWindowWidthDiff(handledIds, dWidth);
 
             return handledIds;
         }
+
         internal void SetWindowHeight(double height)
         {
             if (height < options.WindowMinHeight /*&& height >= 0*/)
@@ -108,10 +110,8 @@ namespace TSStickyWindow
 
             SetWindowHeight(window.Height + dHeight);
 
-            if (Stick[StickPosition.Top] is not null)
-                handledIds = Stick[StickPosition.Top].SetWindowHeightDiff(handledIds, dHeight);
-            if (Stick[StickPosition.Bottom] is not null)
-                handledIds = Stick[StickPosition.Bottom].SetWindowHeightDiff(handledIds, dHeight);
+            handledIds = Stick[StickPosition.Top]?.SetWindowHeightDiff(handledIds, dHeight);
+            handledIds = Stick[StickPosition.Bottom]?.SetWindowHeightDiff(handledIds, dHeight);
 
             return handledIds;
         }
@@ -129,10 +129,9 @@ namespace TSStickyWindow
 
             SetWindowPosition(window.Left + deltaX, window.Top + deltaY);
 
-            foreach (var (_, stickyWindow) in Stick)
+            foreach (var (_, stickyWindow) in Stick.Where(s => s.Value is not null))
             {
-                if (stickyWindow is not null)
-                    handledIds = stickyWindow.SetWindowPositionDiff(handledIds, deltaX, deltaY);
+                handledIds = stickyWindow.SetWindowPositionDiff(handledIds, deltaX, deltaY);
             }
 
             return handledIds;
@@ -231,22 +230,16 @@ namespace TSStickyWindow
             }
 
             if (e.HeightChanged)
-                HandleWindowHeightChanged(e.PreviousSize, e.NewSize);
+                HandleWindowHeightChanged(e, e.NewSize);
             else if (e.WidthChanged)
-                HandleWindowWidthChanged(e.PreviousSize, e.NewSize);
+                HandleWindowWidthChanged(e, e.NewSize);
 
             SetLastWindowPosition(false);
             testControls?.UpdatePositionLabels();
         }
 
-        private void HandleWindowHeightChanged(Size prevSize, Size newSize)
+        private void HandleWindowHeightChanged(SizeChangedEventArgs e, Size newSize)
         {
-            if (newSize.Height <= options.WindowMinHeight)
-            {
-                window.Height = options.WindowMinHeight;
-                return;
-            }
-
             var handledSizeIds = new List<string> { Id };
             var handledPositionIds = new List<string> { Id };
 
@@ -254,8 +247,8 @@ namespace TSStickyWindow
             if (Math.Abs(window.Top - lastTop) > 0.001)
             {
                 // Resize the horizontal windows
-                handledSizeIds = Stick[StickPosition.Left]?.SetWindowHeightDiff(handledSizeIds, Top - lastTop);
-                handledSizeIds = Stick[StickPosition.Right]?.SetWindowHeightDiff(handledSizeIds, Top - lastTop);
+                foreach (var stickWindow in GetHorizontalStickWindows())
+                    handledSizeIds = stickWindow.SetWindowHeightDiff(handledSizeIds, Top - lastTop);
 
                 // Move the top windows
                 Stick[StickPosition.Top]?.SetWindowPositionDiff(handledPositionIds, 0, Top - lastTop);
@@ -264,21 +257,15 @@ namespace TSStickyWindow
             else
             {
                 // Resize the horizontal windows
-                handledSizeIds = Stick[StickPosition.Left]?.SetWindowHeightDiff(handledSizeIds, Bottom - lastBottom);
-                handledSizeIds = Stick[StickPosition.Right]?.SetWindowHeightDiff(handledSizeIds, Bottom - lastBottom);
+                foreach (var stickWindow in GetHorizontalStickWindows())
+                    handledSizeIds = stickWindow.SetWindowHeightDiff(handledSizeIds, Bottom - lastBottom);
 
                 // Move the bottom windows
                 Stick[StickPosition.Bottom]?.SetWindowPositionDiff(handledPositionIds, 0, Bottom - lastBottom);
             }
         }
-        private void HandleWindowWidthChanged(Size prevSize, Size newSize)
+        private void HandleWindowWidthChanged(SizeChangedEventArgs e, Size newSize)
         {
-            if (newSize.Width <= options.WindowMinWidth)
-            {
-                window.Width = options.WindowMinWidth;
-                return;
-            }
-
             var handledSizeIds = new List<string> { Id };
             var handledPositionIds = new List<string> { Id };
 
@@ -286,8 +273,8 @@ namespace TSStickyWindow
             if (Math.Abs(window.Left - lastLeft) > 0.001)
             {
                 // Resize the vertical windows
-                handledSizeIds = Stick[StickPosition.Top]?.SetWindowWidthDiff(handledSizeIds, Left - lastLeft);
-                handledSizeIds = Stick[StickPosition.Bottom]?.SetWindowWidthDiff(handledSizeIds, Left - lastLeft);
+                foreach (var stickWindow in GetVerticalStickWindows())
+                    handledSizeIds = stickWindow.SetWindowWidthDiff(handledSizeIds, Left - lastLeft);
 
                 // Move the left windows
                 Stick[StickPosition.Left]?.SetWindowPositionDiff(handledPositionIds, Left - lastLeft, 0);
@@ -296,8 +283,8 @@ namespace TSStickyWindow
             else
             {
                 // Resize the vertical windows
-                handledSizeIds = Stick[StickPosition.Top]?.SetWindowWidthDiff(handledSizeIds, Right - lastRight);
-                handledSizeIds = Stick[StickPosition.Bottom]?.SetWindowWidthDiff(handledSizeIds, Right - lastRight);
+                foreach (var stickWindow in GetVerticalStickWindows())
+                    handledSizeIds = stickWindow.SetWindowWidthDiff(handledSizeIds, Right - lastRight);
 
                 // Move the right windows
                 Stick[StickPosition.Right]?.SetWindowPositionDiff(handledPositionIds, Right - lastRight, 0);
@@ -358,6 +345,33 @@ namespace TSStickyWindow
         #region Sticked Windows Management
 
         internal Dictionary<StickPosition, StickyWindow> Stick { get; set; }
+
+        private IEnumerable<StickyWindow> GetStickWindows()
+        {
+            return Stick.Where(s => s.Value is not null).Select(kvp => kvp.Value);
+        }
+        private IEnumerable<StickyWindow> GetVerticalStickWindows()
+        {
+            var windows = new List<StickyWindow>();
+
+            if (Stick[StickPosition.Top] is not null)
+                windows.Add(Stick[StickPosition.Top]);
+            if (Stick[StickPosition.Bottom] is not null)
+                windows.Add(Stick[StickPosition.Bottom]);
+
+            return windows;
+        }
+        private IEnumerable<StickyWindow> GetHorizontalStickWindows()
+        {
+            var windows = new List<StickyWindow>();
+
+            if (Stick[StickPosition.Left] is not null)
+                windows.Add(Stick[StickPosition.Left]);
+            if (Stick[StickPosition.Right] is not null)
+                windows.Add(Stick[StickPosition.Right]);
+
+            return windows;
+        }
 
         internal bool CanStickWindow(StickyWindow source, StickPosition position)
         {
