@@ -99,6 +99,8 @@ namespace TSStickyWindow
             if (Stick[StickPosition.Bottom] is not null)
                 handledIds = Stick[StickPosition.Bottom].SetWindowWidthDiff(handledIds, dWidth);
 
+            Stick[StickPosition.Right]?.SetWindowPositionDiffJustOwn(dWidth, 0);
+
             return handledIds;
         }
 
@@ -127,6 +129,8 @@ namespace TSStickyWindow
             if (Stick[StickPosition.Left] is not null)
                 handledIds = Stick[StickPosition.Left].SetWindowHeightDiff(handledIds, dHeight);
 
+            Stick[StickPosition.Bottom]?.SetWindowPositionDiffJustOwn(0, dHeight);
+
             return handledIds;
         }
 
@@ -149,6 +153,10 @@ namespace TSStickyWindow
             }
 
             return handledIds;
+        }
+        internal void SetWindowPositionDiffJustOwn(double deltaX, double deltaY)
+        {
+            SetWindowPosition(window.Left + deltaX, window.Top + deltaY);
         }
 
         internal void ShowWindow()
