@@ -230,15 +230,15 @@ namespace TSStickyWindow
             }
 
             if (e.HeightChanged)
-                HandleWindowHeightChanged(e, e.NewSize);
+                HandleWindowHeightChanged();
             else if (e.WidthChanged)
-                HandleWindowWidthChanged(e, e.NewSize);
+                HandleWindowWidthChanged();
 
             SetLastWindowPosition(false);
             testControls?.UpdatePositionLabels();
         }
 
-        private void HandleWindowHeightChanged(SizeChangedEventArgs e, Size newSize)
+        private void HandleWindowHeightChanged()
         {
             var handledSizeIds = new List<string> { Id };
             var handledPositionIds = new List<string> { Id };
@@ -247,8 +247,8 @@ namespace TSStickyWindow
             if (Math.Abs(window.Top - lastTop) > 0.001)
             {
                 // Resize the horizontal windows
-                foreach (var stickWindow in GetHorizontalStickWindows())
-                    handledSizeIds = stickWindow.SetWindowHeightDiff(handledSizeIds, Top - lastTop);
+                //foreach (var stickWindow in GetHorizontalStickWindows())
+                //    handledSizeIds = stickWindow.SetWindowHeightDiff(handledSizeIds, Top - lastTop);
 
                 // Move the top windows
                 Stick[StickPosition.Top]?.SetWindowPositionDiff(handledPositionIds, 0, Top - lastTop);
@@ -257,14 +257,16 @@ namespace TSStickyWindow
             else
             {
                 // Resize the horizontal windows
-                foreach (var stickWindow in GetHorizontalStickWindows())
-                    handledSizeIds = stickWindow.SetWindowHeightDiff(handledSizeIds, Bottom - lastBottom);
+                if (Stick[StickPosition.Left] is not null)
+                    handledSizeIds = Stick[StickPosition.Left].SetWindowHeightDiff(handledSizeIds, Bottom - lastBottom);
+                if (Stick[StickPosition.Right] is not null)
+                    Stick[StickPosition.Right].SetWindowHeightDiff(handledSizeIds, Bottom - lastBottom);
 
                 // Move the bottom windows
                 Stick[StickPosition.Bottom]?.SetWindowPositionDiff(handledPositionIds, 0, Bottom - lastBottom);
             }
         }
-        private void HandleWindowWidthChanged(SizeChangedEventArgs e, Size newSize)
+        private void HandleWindowWidthChanged()
         {
             var handledSizeIds = new List<string> { Id };
             var handledPositionIds = new List<string> { Id };
@@ -273,8 +275,8 @@ namespace TSStickyWindow
             if (Math.Abs(window.Left - lastLeft) > 0.001)
             {
                 // Resize the vertical windows
-                foreach (var stickWindow in GetVerticalStickWindows())
-                    handledSizeIds = stickWindow.SetWindowWidthDiff(handledSizeIds, Left - lastLeft);
+                //foreach (var stickWindow in GetVerticalStickWindows())
+                //    handledSizeIds = stickWindow.SetWindowWidthDiff(handledSizeIds, Left - lastLeft);
 
                 // Move the left windows
                 Stick[StickPosition.Left]?.SetWindowPositionDiff(handledPositionIds, Left - lastLeft, 0);
@@ -283,14 +285,15 @@ namespace TSStickyWindow
             else
             {
                 // Resize the vertical windows
-                foreach (var stickWindow in GetVerticalStickWindows())
-                    handledSizeIds = stickWindow.SetWindowWidthDiff(handledSizeIds, Right - lastRight);
+                if (Stick[StickPosition.Top] is not null)
+                    handledSizeIds = Stick[StickPosition.Top].SetWindowWidthDiff(handledSizeIds, Right - lastRight);
+                if (Stick[StickPosition.Bottom] is not null)
+                    Stick[StickPosition.Bottom].SetWindowWidthDiff(handledSizeIds, Right - lastRight);
 
                 // Move the right windows
                 Stick[StickPosition.Right]?.SetWindowPositionDiff(handledPositionIds, Right - lastRight, 0);
             }
         }
-
 
         private void WindowOnClosing(object sender, CancelEventArgs e)
         {
@@ -345,33 +348,6 @@ namespace TSStickyWindow
         #region Sticked Windows Management
 
         internal Dictionary<StickPosition, StickyWindow> Stick { get; set; }
-
-        private IEnumerable<StickyWindow> GetStickWindows()
-        {
-            return Stick.Where(s => s.Value is not null).Select(kvp => kvp.Value);
-        }
-        private IEnumerable<StickyWindow> GetVerticalStickWindows()
-        {
-            var windows = new List<StickyWindow>();
-
-            if (Stick[StickPosition.Top] is not null)
-                windows.Add(Stick[StickPosition.Top]);
-            if (Stick[StickPosition.Bottom] is not null)
-                windows.Add(Stick[StickPosition.Bottom]);
-
-            return windows;
-        }
-        private IEnumerable<StickyWindow> GetHorizontalStickWindows()
-        {
-            var windows = new List<StickyWindow>();
-
-            if (Stick[StickPosition.Left] is not null)
-                windows.Add(Stick[StickPosition.Left]);
-            if (Stick[StickPosition.Right] is not null)
-                windows.Add(Stick[StickPosition.Right]);
-
-            return windows;
-        }
 
         internal bool CanStickWindow(StickyWindow source, StickPosition position)
         {
