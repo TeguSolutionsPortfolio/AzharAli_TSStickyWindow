@@ -89,8 +89,10 @@ namespace TSStickyWindow
 
             SetWindowWidth(window.Width + dWidth);
             
-            handledIds = Stick[StickPosition.Left]?.SetWindowWidthDiff(handledIds, dWidth); 
-            handledIds = Stick[StickPosition.Right]?.SetWindowWidthDiff(handledIds, dWidth);
+            if (Stick[StickPosition.Left] is not null)
+                handledIds = Stick[StickPosition.Left].SetWindowWidthDiff(handledIds, dWidth);
+            if (Stick[StickPosition.Right] is not null)
+                handledIds = Stick[StickPosition.Right].SetWindowWidthDiff(handledIds, dWidth);
 
             return handledIds;
         }
@@ -110,8 +112,10 @@ namespace TSStickyWindow
 
             SetWindowHeight(window.Height + dHeight);
 
-            handledIds = Stick[StickPosition.Top]?.SetWindowHeightDiff(handledIds, dHeight);
-            handledIds = Stick[StickPosition.Bottom]?.SetWindowHeightDiff(handledIds, dHeight);
+            if (Stick[StickPosition.Top] is not null)
+                handledIds = Stick[StickPosition.Top].SetWindowHeightDiff(handledIds, dHeight);
+            if (Stick[StickPosition.Bottom] is not null)
+                handledIds = Stick[StickPosition.Bottom]?.SetWindowHeightDiff(handledIds, dHeight);
 
             return handledIds;
         }
