@@ -23,7 +23,8 @@ namespace TSStickyWindow.UISample
             StickyWindowService.Instance = new StickyWindowService(
                 new StickyWindowOptions(10, 50, 50)
                 {
-                    MainWindowType = typeof(MainWindow)
+                    LabelTitleName = "LblTitle",
+                    ButtonUnstickName = "BtnUnstick"
                 },
                 testmode: true)
             {

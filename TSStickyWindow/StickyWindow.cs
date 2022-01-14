@@ -76,6 +76,7 @@ namespace TSStickyWindow
             else
                 window.Width = width;
         }
+
         internal List<string> SetWindowWidthDiff(List<string> handledIds, double dWidth)
         {
             if (handledIds.Contains(Id))
@@ -138,13 +139,11 @@ namespace TSStickyWindow
 
         internal void ShowWindow()
         {
-            if (window.GetType() != options.MainWindowType)
-                window.Show();
+            window.Show();
         }
         internal void CloseWindow()
         {
-            if (options.MainWindowType is not null && window.GetType() != options.MainWindowType)
-                window.Close();
+            window.Close();
         }
 
         #endregion

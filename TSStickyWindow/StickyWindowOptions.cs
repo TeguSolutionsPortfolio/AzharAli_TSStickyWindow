@@ -1,13 +1,11 @@
-﻿using System;
-
-namespace TSStickyWindow
+﻿namespace TSStickyWindow
 {
     public class StickyWindowOptions
     {
         public StickyWindowOptions(int? snapOffset = null, 
             double? windowMinWidth = null, double? windowMinHeight = null,
             double? windowInitWidth = null, double? windowInitHeight = null,
-            string? labelTitleName = null, string buttonUnstickName = null)
+            string labelTitleName = null, string buttonUnstickName = null)
         {
             if (snapOffset is not null)
                 SnapOffset = snapOffset.Value;
@@ -45,14 +43,16 @@ namespace TSStickyWindow
         public double WindowInitialWidth { get; } = 150;
         public double WindowInitialHeight { get; } = 200;
 
-        /// <summary>
-        /// If the main window is included it needs special handling
-        /// for example don't close or open twice
-        /// </summary>
-        public Type? MainWindowType { get; set; }
 
-        public string LabelTitleName { get; set; } = "LblTitle";
-        public string ButtonUnstickName { get; set; } = "BtnUnstick";
+        /// <summary>
+        /// Name of the Label that drags/moves the window (change if required)
+        /// </summary>
+        public string LabelTitleName { get; set; }
+
+        /// <summary>
+        /// Name of the Button which triggers the Unstick event
+        /// </summary>
+        public string ButtonUnstickName { get; set; }
 
     }
 }
