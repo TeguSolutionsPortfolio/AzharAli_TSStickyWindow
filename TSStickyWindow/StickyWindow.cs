@@ -61,6 +61,7 @@ namespace TSStickyWindow
 
         #endregion
 
+
         #region Window & Control
 
         private Window window { get; }
@@ -229,85 +230,80 @@ namespace TSStickyWindow
                 return;
             }
 
-            var handledSizeIds = new List<string> { Id };
-            var handledPositionIds = new List<string> { Id };
-
             if (e.HeightChanged)
-            {
-                if (e.NewSize.Height <= options.WindowMinHeight)
-                {
-                    window.Height = options.WindowMinHeight;
-                    return;
-                }
-
-                // Resized from the Top
-                if (window.Top != lastTop)
-                {
-                    // Resize the horizontal windows
-                    if (Stick[StickPosition.Left] is not null)
-                        handledSizeIds = Stick[StickPosition.Left].SetWindowHeightDiff(handledSizeIds, Top - lastTop);
-                    if (Stick[StickPosition.Right] is not null)
-                        handledSizeIds = Stick[StickPosition.Right].SetWindowHeightDiff(handledSizeIds, Top - lastTop);
-
-                    // Move the top windows
-                    if (Stick[StickPosition.Top] is not null)
-                        Stick[StickPosition.Top]!.SetWindowPositionDiff(handledPositionIds, 0, Top - lastTop);
-                }
-                // Resized from the Bottom
-                else
-                {
-                    // Resize the horizontal windows
-                    if (Stick[StickPosition.Left] is not null)
-                        handledSizeIds = Stick[StickPosition.Left].SetWindowHeightDiff(handledSizeIds, Bottom - lastBottom);
-                    if (Stick[StickPosition.Right] is not null)
-                        handledSizeIds = Stick[StickPosition.Right].SetWindowHeightDiff(handledSizeIds, Bottom - lastBottom);
-
-                    // Move the bottom windows
-                    if (Stick[StickPosition.Bottom] is not null)
-                        Stick[StickPosition.Bottom]!.SetWindowPositionDiff(handledPositionIds, 0, Bottom - lastBottom);
-                }
-            }
+                HandleWindowHeightChanged(e.PreviousSize, e.NewSize);
             else if (e.WidthChanged)
-            {
-
-                if (e.NewSize.Width <= options.WindowMinWidth)
-                {
-                    window.Width = options.WindowMinWidth;
-                    //return;
-                }
-
-                // Resized from the Left
-                //if (window.Left != lastLeft)
-                if (Math.Abs(window.Left - lastLeft) > 0.1)
-                {
-                    // Resize the vertical windows
-                    if (Stick[StickPosition.Top] is not null)
-                        handledSizeIds = Stick[StickPosition.Top].SetWindowWidthDiff(handledSizeIds, Left - lastLeft);
-                    if (Stick[StickPosition.Bottom] is not null)
-                        handledSizeIds = Stick[StickPosition.Bottom].SetWindowWidthDiff(handledSizeIds, Left - lastLeft);
-
-                    // Move the left windows
-                    if (Stick[StickPosition.Left] is not null)
-                        Stick[StickPosition.Left].SetWindowPositionDiff(handledPositionIds, Left - lastLeft, 0);
-                }
-                // Resized from the Right
-                else
-                {
-                    // Resize the vertical windows
-                    if (Stick[StickPosition.Top] is not null)
-                        handledSizeIds = Stick[StickPosition.Top].SetWindowWidthDiff(handledSizeIds, Right - lastRight);
-                    if (Stick[StickPosition.Bottom] is not null)
-                        handledSizeIds = Stick[StickPosition.Bottom].SetWindowWidthDiff(handledSizeIds, Right - lastRight);
-
-                    // Move the right windows
-                    if (Stick[StickPosition.Right] is not null)
-                        Stick[StickPosition.Right].SetWindowPositionDiff(handledPositionIds, Right - lastRight, 0);
-                }
-            }
+                HandleWindowWidthChanged(e.PreviousSize, e.NewSize);
 
             SetLastWindowPosition(false);
             testControls?.UpdatePositionLabels();
         }
+
+        private void HandleWindowHeightChanged(Size prevSize, Size newSize)
+        {
+            if (newSize.Height <= options.WindowMinHeight)
+            {
+                window.Height = options.WindowMinHeight;
+                return;
+            }
+
+            var handledSizeIds = new List<string> { Id };
+            var handledPositionIds = new List<string> { Id };
+
+            // Resized from the Top
+            if (Math.Abs(window.Top - lastTop) > 0.1)
+            {
+                // Resize the horizontal windows
+                handledSizeIds = Stick[StickPosition.Left]?.SetWindowHeightDiff(handledSizeIds, Top - lastTop);
+                handledSizeIds = Stick[StickPosition.Right]?.SetWindowHeightDiff(handledSizeIds, Top - lastTop);
+
+                // Move the top windows
+                Stick[StickPosition.Top]?.SetWindowPositionDiff(handledPositionIds, 0, Top - lastTop);
+            }
+            // Resized from the Bottom
+            else
+            {
+                // Resize the horizontal windows
+                handledSizeIds = Stick[StickPosition.Left]?.SetWindowHeightDiff(handledSizeIds, Bottom - lastBottom);
+                handledSizeIds = Stick[StickPosition.Right]?.SetWindowHeightDiff(handledSizeIds, Bottom - lastBottom);
+
+                // Move the bottom windows
+                Stick[StickPosition.Bottom]?.SetWindowPositionDiff(handledPositionIds, 0, Bottom - lastBottom);
+            }
+        }
+        private void HandleWindowWidthChanged(Size prevSize, Size newSize)
+        {
+            if (newSize.Width <= options.WindowMinWidth)
+            {
+                window.Width = options.WindowMinWidth;
+                return;
+            }
+
+            var handledSizeIds = new List<string> { Id };
+            var handledPositionIds = new List<string> { Id };
+
+            // Resized from the Left
+            if (Math.Abs(window.Left - lastLeft) > 0.1)
+            {
+                // Resize the vertical windows
+                handledSizeIds = Stick[StickPosition.Top]?.SetWindowWidthDiff(handledSizeIds, Left - lastLeft);
+                handledSizeIds = Stick[StickPosition.Bottom]?.SetWindowWidthDiff(handledSizeIds, Left - lastLeft);
+
+                // Move the left windows
+                Stick[StickPosition.Left]?.SetWindowPositionDiff(handledPositionIds, Left - lastLeft, 0);
+            }
+            // Resized from the Right
+            else
+            {
+                // Resize the vertical windows
+                handledSizeIds = Stick[StickPosition.Top]?.SetWindowWidthDiff(handledSizeIds, Right - lastRight);
+                handledSizeIds = Stick[StickPosition.Bottom]?.SetWindowWidthDiff(handledSizeIds, Right - lastRight);
+
+                // Move the right windows
+                Stick[StickPosition.Right]?.SetWindowPositionDiff(handledPositionIds, Right - lastRight, 0);
+            }
+        }
+
 
         private void WindowOnClosing(object sender, CancelEventArgs e)
         {
