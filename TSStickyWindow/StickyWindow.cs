@@ -44,6 +44,9 @@ namespace TSStickyWindow
             this.window.SizeChanged += WindowOnSizeChanged;
             this.window.Closing += WindowOnClosing;
 
+            window.MinWidth = options.WindowMinWidth;
+            window.MinHeight = options.WindowMinHeight;
+
             SetWindowControls();
 
             lblTitle.Content = Id;
@@ -55,11 +58,6 @@ namespace TSStickyWindow
                 [StickPosition.Bottom] = null,
                 [StickPosition.Left] = null
             };
-
-            window.Width = options.WindowInitialWidth;
-            window.Height = options.WindowInitialHeight;
-            window.MinWidth = options.WindowMinWidth;
-            window.MinHeight = options.WindowMinHeight;
 
             this.window.Show();
         }
