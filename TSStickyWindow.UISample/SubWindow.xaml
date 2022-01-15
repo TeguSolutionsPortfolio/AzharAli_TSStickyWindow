@@ -6,13 +6,16 @@
         xmlns:local="clr-namespace:TSStickyWindow.UISample"
         mc:Ignorable="d"
         Title="TS Sticky Window Sample" 
-        Height="150" Width="200" 
+        Height="150" 
+        Width="200" 
         WindowStyle="None" 
         ResizeMode="CanResize"
-        Background="#222222" >
+        Background="#222222"
+        AllowsTransparency="False">
 
     <WindowChrome.WindowChrome>
-        <WindowChrome CaptionHeight="1"/>
+        <WindowChrome CaptionHeight="1"
+                      CornerRadius="0"/>
     </WindowChrome.WindowChrome>
 
     <Border Name="BrdTop" BorderThickness="0, 2, 0, 0" BorderBrush="DarkGray">
