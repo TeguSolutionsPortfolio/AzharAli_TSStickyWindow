@@ -2,13 +2,15 @@
 {
     public class StickyWindowOptions
     {
-        public StickyWindowOptions(int? snapOffset = null, 
+        public StickyWindowOptions(int? snapOffset = null, int? snapCornerOffset = null,
             double? windowMinWidth = null, double? windowMinHeight = null,
             double? windowInitWidth = null, double? windowInitHeight = null,
             string labelTitleName = null, string buttonUnstickName = null)
         {
             if (snapOffset is not null)
                 SnapOffset = snapOffset.Value;
+            if (snapCornerOffset is not null)
+                SnapCornerOffset = snapCornerOffset.Value;
 
             if (windowMinWidth is not null)
                 WindowMinWidth = windowMinWidth.Value;
