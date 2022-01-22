@@ -18,10 +18,10 @@
                       CornerRadius="0"/>
     </WindowChrome.WindowChrome>
 
-    <!--<Border Name="BrdTop" BorderThickness="0, 2, 0, 0" BorderBrush="DarkGray">
+    <Border Name="BrdTop" BorderThickness="0, 2, 0, 0" BorderBrush="DarkGray">
         <Border Name="BrdRight" BorderThickness="0, 0, 2, 0" BorderBrush="DarkGray">
             <Border Name="BrdBottom" BorderThickness="0, 0, 0, 2" BorderBrush="DarkGray">
-                <Border Name="BrdLeft" BorderThickness="2, 0, 0, 0" BorderBrush="DarkGray">-->
+                <Border Name="BrdLeft" BorderThickness="2, 0, 0, 0" BorderBrush="DarkGray">
 
                     <Grid>
                         <Grid.RowDefinitions>
@@ -83,9 +83,9 @@
                         </Grid>
                     </Grid>
 
-                <!--</Border>
+                </Border>
             </Border>
         </Border>
-    </Border>-->
+    </Border>
 
 </Window>

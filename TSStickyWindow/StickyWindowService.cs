@@ -241,32 +241,32 @@ namespace TSStickyWindow
 
                 // Source Top Edge
                 if (Math.Abs(target.Bottom - source.Top) < options.SnapOffset &&
-                    target.Left <= source.Right &&
-                    target.Right >= source.Left)
+                    target.Left <= source.Right - options.SnapCornerOffset &&
+                    target.Right >= source.Left + options.SnapCornerOffset)
                 {
                     return (StickPosition.Top, target);
                 }
 
                 // Source Right Edge
                 if (Math.Abs(target.Left - source.Right) < options.SnapOffset &&
-                    target.Top <= source.Bottom &&
-                    target.Bottom >= source.Top)
+                    target.Top <= source.Bottom - options.SnapCornerOffset &&
+                    target.Bottom >= source.Top + options.SnapCornerOffset)
                 {
                     return (StickPosition.Right, target);
                 }
 
                 // Source Bottom Edge
                 if (Math.Abs(target.Top - source.Bottom) < options.SnapOffset &&
-                    target.Left <= source.Right &&
-                    target.Right >= source.Left)
+                    target.Left <= source.Right - options.SnapCornerOffset &&
+                    target.Right >= source.Left + options.SnapCornerOffset)
                 {
                     return (StickPosition.Bottom, target);
                 }
 
                 // Source Left Edge
                 if (Math.Abs(target.Right - source.Left) < options.SnapOffset &&
-                         target.Top <= source.Bottom &&
-                         target.Bottom >= source.Top)
+                         target.Top <= source.Bottom - options.SnapCornerOffset &&
+                         target.Bottom >= source.Top + options.SnapCornerOffset)
                 {
                     return (StickPosition.Left, target);
                 }

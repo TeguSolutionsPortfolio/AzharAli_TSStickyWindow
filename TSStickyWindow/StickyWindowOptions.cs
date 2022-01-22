@@ -32,6 +32,11 @@
         public int SnapOffset { get; } = 10;
 
         /// <summary>
+        /// Offset from the corners to trigger the magnet effect and stick
+        /// </summary>
+        public int SnapCornerOffset { get; } = 20;
+
+        /// <summary>
         /// Minimal width of the window for resize, has to be bigger or equal than 0!
         /// </summary>
         public double WindowMinWidth { get; } = 50;
