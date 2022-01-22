@@ -91,7 +91,7 @@ namespace TSStickyWindow
                 layoutWindow.Window.Width = layoutWindow.Width;
                 layoutWindow.Window.Height = layoutWindow.Height;
 
-                var stickyWindow = new StickyWindow(this, options, layoutWindow.Window, layoutWindow.Id);
+                var stickyWindow = new StickyWindow(this, options, layoutWindow.Window, layoutWindow.Id, testMode);
 
                 windows.Add(stickyWindow);
                 stickyWindow.ShowWindow();
